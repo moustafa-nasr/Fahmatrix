@@ -29,5 +29,37 @@ public class DataFrame {
         return new Series(columns.get(name), new ArrayList<>(index));
     }
     
+    public void print() {
+        if (columns.isEmpty()) {
+            System.out.println("Empty DataFrame");
+            return;
+        }
+        
+        // Print header
+        System.out.print("Index\t");
+        for (String colName : columns.keySet()) {
+            System.out.print("| " + colName + "\t");
+        }
+        System.out.println();
+        
+        // Print separator line
+        System.out.print("--------");
+        for (int i = 0; i < columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+        
+        // Print each row
+        for (int i = 0; i < index.size(); i++) {
+            System.out.print(index.get(i) + "\t");
+            
+            for (List<Object> column : columns.values()) {
+                System.out.print("| " + column.get(i) + "\t");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
     // Add more operations as needed
 }
