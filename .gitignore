@@ -1,3 +1,61 @@
+# Gradle
+.gradle/
+build/
+out/
+!gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Eclipse
+.settings/
+.project
+.classpath
+bin/
+
+# VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Mac OS
+.DS_Store
+
+# Logs
+*.log
+logs/
+
+# Dependency cache (Gradle, Maven)
+**/.gradle/caches/
+**/.m2/
+
+# Local configuration files (env, credentials)
+*.env
+*.properties
+*.keystore
+*.jks
+
+# Build reports
+reports/
+tests/
+test-results/
+**/build/reports/
+**/build/test-results/
+
+# Generated files
+**/generated/
+**/target/
+**/bin/
+
+# Avoid ignoring Gradle wrapper (necessary for builds)
+!gradle-wrapper.jar
+!gradle/wrapper/gradle-wrapper.properties
+
 # Compiled class file
 *.class
 
