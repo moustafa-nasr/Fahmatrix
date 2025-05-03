@@ -27,12 +27,18 @@ public class Series {
     }
     
     public void print() {
+        if (values.isEmpty() || index.isEmpty()) {
+            System.out.println("Empty Series");
+            return;
+        }
+
         System.out.println("Series ");
         System.out.println("Index\t| Value");
         System.out.println("----------------");
         
         for (int i = 0; i < values.size(); i++) {
-            System.out.println(index.get(i) + "\t| " + values.get(i));
+            String value = (values.get(i) != null) ? String.valueOf(values.get(i)) : "null";
+            System.out.println(index.get(i) + "\t| " + value);
         }
         
         System.out.println();

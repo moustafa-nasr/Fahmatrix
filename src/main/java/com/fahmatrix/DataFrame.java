@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fahmatrix.Importers.CsvImporter;
+
 public class DataFrame {
 
     private Map<String, List<Object>> columns;
@@ -30,7 +32,7 @@ public class DataFrame {
     }
     
     public void print() {
-        if (columns.isEmpty()) {
+        if (columns.isEmpty() || index.isEmpty()) {
             System.out.println("Empty DataFrame");
             return;
         }
@@ -54,11 +56,24 @@ public class DataFrame {
             System.out.print(index.get(i) + "\t");
             
             for (List<Object> column : columns.values()) {
-                System.out.print("| " + column.get(i) + "\t");
+                // Safe access with bounds checking
+                String value = (i < column.size()) ? String.valueOf(column.get(i)) : "null";
+                System.out.print("| " + value + "\t");
             }
             System.out.println();
         }
         System.out.println();
+    }
+
+    public void readCSV(String filePath) {
+        try{
+            CsvImporter csvObject = new CsvImporter();
+            csvObject.readCSV(filePath);
+            columns = csvObject.getColumns();
+            index = csvObject.getIndex();
+        }catch(Throwable e){
+            e.printStackTrace();
+        }
     }
 
     // Add more operations as needed
