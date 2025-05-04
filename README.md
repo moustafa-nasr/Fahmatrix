@@ -42,6 +42,12 @@ public class Main {
 
 ---
 
+## 📜 Docs
+
+You can find compiled Java Docs [over here](https://moustafa-nasr.github.io/Fahmatrix/)
+
+---
+
 ## ✨ Features
 
 - Load CSV files into DataFrame
