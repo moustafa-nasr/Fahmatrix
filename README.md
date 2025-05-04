@@ -18,22 +18,6 @@ Visit [Releases](https://github.com/moustafa-nasr/fahmatrix/releases) and downlo
 
 Include it manually in your project’s classpath or use Maven/Gradle if you're pulling from GitHub Packages (to be added in future versions).
 
-### 🛠️ Maven (coming soon..)
-```xml
-<dependency>
-  <groupId>com.fahmatrix</groupId>
-  <artifactId>fahmatrix</artifactId>
-  <version>0.1.0</version>
-</dependency>
-```
-
-### 🛠️ Gradle
-```kotlin
-dependencies {
-  implementation("com.fahmatrix:fahmatrix:0.1.0")
-}
-```
-
 If you're building locally:
 ```bash
 git clone https://github.com/moustafa-nasr/fahmatrix.git
@@ -51,7 +35,7 @@ import com.fahmatrix.DataFrame;
 public class Main {
     public static void main(String[] args) {
         DataFrame df = DataFrame.readCSV("data.csv");
-        df.head(5).print();
+        df.print();
     }
 }
 ```
@@ -61,11 +45,11 @@ public class Main {
 ## ✨ Features
 
 - Load CSV files into DataFrame
-- View top rows with `head()`
-- Filter rows and select columns
 - Pretty-print data to console
 
 ### Coming Soon:
+- View top rows with `head()`
+- Filter rows and select columns
 - Aggregations (sum, mean, etc.)
 - GroupBy and pivot tables
 - Data export to CSV or JSON

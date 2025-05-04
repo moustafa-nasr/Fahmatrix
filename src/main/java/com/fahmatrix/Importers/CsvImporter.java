@@ -10,9 +10,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * CsvImporter is the basic logic for handling CSV import operations
+ * <br><br>
+ * Current Features: <br>
+ * Support CSV/TSV files <br>
+ * Supports , \t ; | # : delimiters <br>
+ * Handles quotes <br>
+ * Can handle large files less than 1GB <br>
+ */
 public class CsvImporter {
 
-    /* Future Features
+    /*
+     * Future Features
      * Adjust the threshold based on your typical available memory
      * Consider adding progress tracking for large files
      * Add file encoding detection for international files
@@ -24,16 +34,18 @@ public class CsvImporter {
     private List<String> index = new ArrayList<>();
 
     /**
-     * Main Read CSV method
-     * @param filePath
-     * @throws IOException
+     * Main Read CSV method <br>
+     * Auto Switch from In-Memory read (fast) to Streaming read (slow but memory efficient) according to file size 
+     * <br>
+     * @param filePath file path as a string
+     * @throws IOException error parsing file
      */
     public void readCSV(String filePath) throws IOException {
         long fileSize = Files.size(Paths.get(filePath));
-        
+
         if (fileSize < MEMORY_EFFICIENT_THRESHOLD) {
             try {
-                readCSVInMemory(filePath);  // Fast but uses more memory
+                readCSVInMemory(filePath); // Fast but uses more memory
             } catch (OutOfMemoryError e) {
                 // If we run out of memory, clear and switch to streaming
                 columns.clear();
@@ -48,45 +60,49 @@ public class CsvImporter {
 
     /**
      * In-Memory read for fast and small files
-     * @param filePath
-     * @throws IOException
+     * <br>
+     * @param filePath file path as a string
+     * @throws IOException error parsing file
      */
     private void readCSVInMemory(String filePath) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(filePath));
-        if (lines.isEmpty()) return;
-        
+        if (lines.isEmpty())
+            return;
+
         CSVFormat format = detectCSVFormat(lines.get(0));
         String[] headers = parseCSVLine(lines.get(0), format);
-        
+
         initializeColumns(headers);
-        
+
         for (int i = 1; i < lines.size(); i++) {
             processCSVLine(lines.get(i), format, headers);
         }
-        
+
         generateIndex();
     }
 
     /**
      * Stream read for large files
-     * @param filePath
-     * @throws IOException
+     * <br>
+     * @param filePath file path as a string
+     * @throws IOException error parsing file
      */
     private void readCSVStreaming(String filePath) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String headerLine = reader.readLine();
-            if (headerLine == null) return;
-            
+            if (headerLine == null)
+                return;
+
             CSVFormat format = detectCSVFormat(headerLine);
             String[] headers = parseCSVLine(headerLine, format);
-            
+
             initializeColumns(headers);
-            
+
             String line;
             while ((line = reader.readLine()) != null) {
                 processCSVLine(line, format, headers);
             }
-            
+
             generateIndex();
         }
     }
@@ -95,18 +111,19 @@ public class CsvImporter {
      * Detect CSV format
      * Supports ',', '\t', ';', '|', '#',':' delimiters
      * Handles quotes
-     * @param sampleLine
+     * <br>
+     * @param sampleLine one line of data
      * @return CSVformat Object
      */
     private CSVFormat detectCSVFormat(String sampleLine) {
         // Check for common delimiters
-        char[] delimiters = {',', '\t', ';', '|', '#',':'};
+        char[] delimiters = { ',', '\t', ';', '|', '#', ':' };
         int[] delimiterCounts = new int[delimiters.length];
-        
+
         for (int i = 0; i < delimiters.length; i++) {
             delimiterCounts[i] = countOccurrences(sampleLine, delimiters[i]);
         }
-        
+
         // Find most common delimiter
         int maxIndex = 0;
         for (int i = 1; i < delimiterCounts.length; i++) {
@@ -114,32 +131,33 @@ public class CsvImporter {
                 maxIndex = i;
             }
         }
-        
+
         char delimiter = delimiters[maxIndex];
         boolean hasQuotes = sampleLine.contains("\"");
-        
+
         return new CSVFormat(delimiter, hasQuotes);
     }
 
     /**
-     * Parse single line into String Array logic
+     * Parse single line into String Array logic <br>
      * used in header detection and before converting into column
-     * @param line
-     * @param format
-     * @return
+     * <br>
+     * @param line   one line of data
+     * @param format current file format
+     * @return Basic Array of cells data
      */
     private String[] parseCSVLine(String line, CSVFormat format) {
         if (!format.hasQuotes()) {
             return line.split(String.valueOf(format.getDelimiter()));
         }
-        
+
         List<String> fields = new ArrayList<>();
         boolean inQuotes = false;
         StringBuilder currentField = new StringBuilder();
-        
+
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
-            
+
             if (c == '"') {
                 if (inQuotes && i < line.length() - 1 && line.charAt(i + 1) == '"') {
                     // Escaped quote
@@ -155,14 +173,15 @@ public class CsvImporter {
                 currentField.append(c);
             }
         }
-        
+
         fields.add(currentField.toString());
         return fields.toArray(new String[0]);
     }
 
     /**
      * Initialize Columns according to detected headers
-     * @param headers
+     * <br>
+     * @param headers Array of headers
      */
     private void initializeColumns(String[] headers) {
         columns.clear();
@@ -173,9 +192,10 @@ public class CsvImporter {
 
     /**
      * Parse and convert single line into column logic
-     * @param line
-     * @param format
-     * @param headers
+     * <br>
+     * @param line    one line of data
+     * @param format  current file format
+     * @param headers Array of headers
      */
     private void processCSVLine(String line, CSVFormat format, String[] headers) {
         String[] values = parseCSVLine(line, format);
@@ -185,15 +205,17 @@ public class CsvImporter {
     }
 
     /**
-     * Parse single cell into proper value
-     * Supports String, Integer And Double.
-     * Future Feature: Date and Time.
+     * Parse single cell into proper value <br>
+     * Supports String, Integer And Double <br>
+     * Future Feature: Date and Time <br>
+     * <br>
      * @param value cell value
      * @return proper object
      */
     private Object parseValue(String value) {
-        if (value.isEmpty()) return null;
-        
+        if (value.isEmpty())
+            return null;
+
         try {
             if (value.contains(".")) {
                 return Double.parseDouble(value);
@@ -206,22 +228,25 @@ public class CsvImporter {
     }
 
     /**
-     * Count the number of occurrences for certain character in string
+     * Count the number of occurrences for certain character in string <br>
      * Used to detect the delimiter
+     * <br>
      * @param str single line from the csv file
-     * @param ch delimiter character
+     * @param ch  delimiter character
      * @return number of occurances
      */
     private int countOccurrences(String str, char ch) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
-            if (str.charAt(i) == ch) count++;
+            if (str.charAt(i) == ch)
+                count++;
         }
         return count;
     }
 
     /**
      * Generate index from data
+     * <br>
      */
     private void generateIndex() {
         index.clear();
@@ -232,9 +257,10 @@ public class CsvImporter {
             }
         }
     }
-    
+
     /**
      * Get the parsed columns
+     * <br>
      * @return parsed columns
      */
     public Map<String, List<Object>> getColumns() {
@@ -243,6 +269,7 @@ public class CsvImporter {
 
     /**
      * Get the parsed index
+     * <br>
      * @return parsed index
      */
     public List<String> getIndex() {
@@ -251,20 +278,21 @@ public class CsvImporter {
 
     /**
      * CSV format object
+     * <br>
      */
     private class CSVFormat {
         private final char delimiter;
         private final boolean hasQuotes;
-        
+
         public CSVFormat(char delimiter, boolean hasQuotes) {
             this.delimiter = delimiter;
             this.hasQuotes = hasQuotes;
         }
-        
+
         public char getDelimiter() {
             return delimiter;
         }
-        
+
         public boolean hasQuotes() {
             return hasQuotes;
         }
