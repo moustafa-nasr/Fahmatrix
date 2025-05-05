@@ -39,6 +39,7 @@ public class DataFrame {
     /**
      * Constructor with known indexes and empty columns
      * <br>
+     * 
      * @param index Array of indexes
      */
     public DataFrame(List<String> index) {
@@ -49,6 +50,7 @@ public class DataFrame {
     /**
      * Constructor with known indexes and columns
      * <br>
+     * 
      * @param index   Array of indexes
      * @param columns Map of data where key is the column name and the value is
      *                Array of cells data
@@ -64,6 +66,7 @@ public class DataFrame {
     /**
      * Add column to the end of data table
      * <br>
+     * 
      * @param name index name
      * @param data column data (Array of cells data)
      */
@@ -80,11 +83,70 @@ public class DataFrame {
     /**
      * return a new Series Object with data of only one column
      * <br>
+     * 
      * @param name column name
      * @return Series data with index
      */
     public Series getColumn(String name) {
         return new Series(columns.get(name), new ArrayList<>(index));
+    }
+
+    /**
+     * Return the first 5 rows as DataFrame Object
+     * @return first 5 rows
+     */
+    public DataFrame head() {
+        return head(5);
+    }
+
+    /**
+     * Return the first n rows as DataFrame Object
+     * @param n the max number of rows to return 
+     * @return rows
+     */
+    public DataFrame head(int n) {
+        DataFrame subset = new DataFrame();
+        int rows = Math.min(n, index.size());
+
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            List<Object> data = entry.getValue();
+            List<Object> subsetData = new ArrayList<>();
+
+            for (int i = 0; i < Math.min(rows, data.size()); i++) {
+                subsetData.add(data.get(i));
+            }
+
+            subset.addColumn(entry.getKey(), subsetData);
+        }
+
+        return subset;
+    }
+
+    /**
+     * Return the last 5 rows as DataFrame Object
+     * @return last 5 rows
+     */
+    public DataFrame tail() {
+        return tail(5);
+    }
+
+    /**
+     * Return the last n rows as DataFrame Object
+     * @param n the max number of rows to return 
+     * @return rows
+     */
+    public DataFrame tail(int n) {
+        DataFrame subset = new DataFrame();
+        int rows = Math.min(n, index.size());
+
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            List<Object> data = entry.getValue();
+            int start = Math.max(data.size() - rows, 0);
+            List<Object> subsetData = new ArrayList<>(data.subList(start, data.size()));
+            subset.addColumn(entry.getKey(), subsetData);
+        }
+
+        return subset;
     }
 
     /**
@@ -127,14 +189,16 @@ public class DataFrame {
 
     /**
      * Read , Parse and save the CSV file<br>
-     * Make sure the file is found before calling. And it has a proper CSV/TSV format <br>
+     * Make sure the file is found before calling. And it has a proper CSV/TSV
+     * format <br>
      * All data are saved in the same object no need to create a new one <br>
      * <br>
      * Note: it replace any old data <br>
      * <br>
+     * 
      * @param filePath CSV file path
      * @return the same object after saving data (this) if successful
-     * <br>
+     *         <br>
      */
     public DataFrame readCSV(String filePath) {
         try {
