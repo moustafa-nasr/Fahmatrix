@@ -1,9 +1,12 @@
 package com.fahmatrix;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.DoubleSummaryStatistics;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.OptionalDouble;
 
 import com.fahmatrix.Importers.CsvImporter;
 
@@ -93,6 +96,7 @@ public class DataFrame {
 
     /**
      * Return the first 5 rows as DataFrame Object
+     * 
      * @return first 5 rows
      */
     public DataFrame head() {
@@ -101,7 +105,8 @@ public class DataFrame {
 
     /**
      * Return the first n rows as DataFrame Object
-     * @param n the max number of rows to return 
+     * 
+     * @param n the max number of rows to return
      * @return rows
      */
     public DataFrame head(int n) {
@@ -124,6 +129,7 @@ public class DataFrame {
 
     /**
      * Return the last 5 rows as DataFrame Object
+     * 
      * @return last 5 rows
      */
     public DataFrame tail() {
@@ -132,7 +138,8 @@ public class DataFrame {
 
     /**
      * Return the last n rows as DataFrame Object
-     * @param n the max number of rows to return 
+     * 
+     * @param n the max number of rows to return
      * @return rows
      */
     public DataFrame tail(int n) {
@@ -185,6 +192,118 @@ public class DataFrame {
             System.out.println();
         }
         System.out.println();
+    }
+
+    /**
+     * Pretty Print Data Summery in System Console
+     */
+    public void describe() {
+        if (columns.isEmpty()) {
+            System.out.println("Empty DataFrame");
+            return;
+        }
+
+        System.out.println("DataFrame Description:");
+        System.out.print("|\t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + entry.getKey() + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| Count\t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).count() + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| Min \t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).min().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| Max \t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).max().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| Sum \t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).sum().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| Mean \t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).mean().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| Stdev\t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).stdDev().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| 25%\t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).quantile25().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| 50%\t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).median().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
+        System.out.print("| 75%\t");
+        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
+            System.out.print("| " + getColumn(entry.getKey()).quantile75().orElse(0.0) + "\t");
+        }
+        System.out.println();
+        for (int i = 0; i <= columns.size(); i++) {
+            System.out.print("+-------");
+        }
+        System.out.println();
+
     }
 
     /**
