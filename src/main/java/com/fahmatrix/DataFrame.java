@@ -1,12 +1,9 @@
 package com.fahmatrix;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.DoubleSummaryStatistics;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.OptionalDouble;
 
 import com.fahmatrix.Importers.CsvImporter;
 

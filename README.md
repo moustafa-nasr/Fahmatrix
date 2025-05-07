@@ -52,11 +52,12 @@ You can find compiled Java Docs [over here](https://moustafa-nasr.github.io/Fahm
 
 - Load CSV files into DataFrame
 - Pretty-print data to console
+- View top rows with `head()` or bottom ones with `tail()`
+- Aggregations (count, min, max, sum, mean ,median, standard deviation, 25%, 50%, 70%, custom percentage)
 
 ### Coming Soon:
-- View top rows with `head()`
+
 - Filter rows and select columns
-- Aggregations (sum, mean, etc.)
 - GroupBy and pivot tables
 - Data export to CSV or JSON
 - Type inference and conversion
