@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.fahmatrix" // Replace with your group
-version = "0.1.0"
+version = "0.1.1"
 
 java {
     toolchain {
@@ -26,4 +26,9 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+}
+
+tasks.javadoc {
+    exclude("com/fahmatrix/Importers/**")
+    exclude("examples/**")
 }
