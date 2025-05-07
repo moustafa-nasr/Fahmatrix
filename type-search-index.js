@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.fahmatrix.Importers","l":"CsvImporter"},{"p":"com.fahmatrix","l":"DataFrame"},{"p":"com.fahmatrix","l":"Series"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"com.fahmatrix","l":"DataFrame"},{"p":"com.fahmatrix","l":"Series"}];updateSearchResults();
