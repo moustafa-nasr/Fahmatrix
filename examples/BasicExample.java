@@ -15,8 +15,11 @@ public class BasicExample {
 		df.addColumn("age", Arrays.asList(25, 30, 35));
 		df.addColumn("name", Arrays.asList("Alice", "Bob", "Charlie"));
 
-        Series ages = df.getColumn("name");
+        Series ages = df.getColumn("age");
         df.print();
         ages.print();
+
+        df = df.transpose();
+        df.print();
     }
 }

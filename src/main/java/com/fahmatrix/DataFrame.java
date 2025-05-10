@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import com.fahmatrix.Importers.CsvImporter;
 
@@ -152,6 +154,43 @@ public class DataFrame {
 
         return subset;
     }
+
+    /**
+     * Reverse Rows and Columns
+     * <br>
+     * 
+     * @return new DataFrame with transposed data
+     */
+    public DataFrame transpose() {
+        DataFrame transposed = new DataFrame();
+        if (columns.isEmpty())
+            return transposed;
+
+        // Create new index from original column names
+        List<String> newIndex = new ArrayList<>(columns.keySet());
+
+        // Determine number of rows in original (use first column's size)
+        int numRows = columns.values().iterator().next().size();
+
+        // Create transposed columns (original rows become columns)
+        for (int i = 0; i < numRows; i++) {
+            String colName = index.size() > i ? index.get(i) : String.valueOf(i);
+            List<Object> newColumn = new ArrayList<>();
+
+            // Add all values from this original row
+            for (List<Object> originalColumn : columns.values()) {
+                newColumn.add(originalColumn.size() > i ? originalColumn.get(i) : "null");
+            }
+
+            transposed.addColumn(colName, newColumn);
+        }
+
+        // Set the new index (original column names)
+        transposed.index = newIndex;
+
+        return transposed;
+    }
+
 
     /**
      * Pretty Print in System Console
