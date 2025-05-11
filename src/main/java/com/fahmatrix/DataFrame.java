@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import com.fahmatrix.Importers.CsvImporter;
+import com.fahmatrix.Importers.SimpleXlsxImporter;
 
 /**
  * DataFrame is the basic object for hadling data
@@ -231,7 +230,9 @@ public class DataFrame {
     }
 
     /**
-     * Pretty Print Data Summery in System Console
+     * Pretty Print Data Summary in System Console
+     * <br>
+     * 
      */
     public void describe() {
         if (columns.isEmpty()) {
@@ -361,6 +362,30 @@ public class DataFrame {
             csvObject.readCSV(filePath);
             columns = csvObject.getColumns();
             index = csvObject.getIndex();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    /**
+     * Read , Parse and save the Microsoft Excel SpreadSheet xlsx file<br>
+     * Make sure the file is found before calling. <br>
+     * All data are saved in the same object no need to create a new one <br>
+     * <br>
+     * Note: it replace any old data <br>
+     * <br>
+     * 
+     * @param filePath xlsx file path
+     * @return the same object after saving data (this) if successful
+     *         <br>
+     */
+    public DataFrame readXlsx(String filePath) {
+        try {
+            SimpleXlsxImporter xlsxObject = new SimpleXlsxImporter();
+            xlsxObject.readExcel(filePath);
+            columns = xlsxObject.getColumns();
+            index = xlsxObject.getIndex();
         } catch (Throwable e) {
             e.printStackTrace();
         }
