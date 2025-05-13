@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
+import com.fahmatrix.Helpers.DataSelector;
 import com.fahmatrix.Importers.CsvImporter;
 import com.fahmatrix.Importers.SimpleXlsxImporter;
 
@@ -15,7 +17,9 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Current Features: <br>
  * Select/Add column data <br>
  * Print in System Console <br>
- * Import From CSV/TSV <br>
+ * Print data Summary <br>
+ * Import From CSV/TSV, xlsx <br>
+ * Reverse (transpose) data <br>
  */
 public class DataFrame {
 
@@ -57,9 +61,9 @@ public class DataFrame {
      *                Array of cells data
      */
     public DataFrame(List<String> index, Map<String, List<Object>> columns) {
-        if (index.size() != columns.size()) {
-            throw new IllegalArgumentException("Values and index must be same length");
-        }
+        // if (index.size() != columns.size()) {
+        //     throw new IllegalArgumentException("Values and index must be same length "+index.size()+" != "+columns.size());
+        // }
         this.columns = columns;
         this.index = index;
     }
@@ -188,6 +192,157 @@ public class DataFrame {
         transposed.index = newIndex;
 
         return transposed;
+    }
+
+    /**
+     * Select Cell by row and column names 
+     * <br>
+     * 
+     * @param rowLabel row name
+     * @param colLabel column name
+     * @return Object for cell value (String, Float, Double)
+     */
+    public Object getByLabel(String rowLabel, String colLabel) {
+        int rowIdx = index.indexOf(rowLabel);
+        if (rowIdx == -1) throw new IllegalArgumentException("Row label not found");
+        List<Object> column = columns.get(colLabel);
+        if (column == null) throw new IllegalArgumentException("Column label not found");
+        return column.get(rowIdx);
+    }
+
+    /**
+     * Select Rows by names 
+     * <br>
+     * this method assumes you selected all columns
+     * <br>
+     * 
+     * @param rowLabels Basic String Array (String[]) for row names 
+     * @return New Dataframe with only the selected data
+     */
+    public DataFrame getRowsByLabel(String... rowLabels) {
+        return getByLabels(rowLabels, columns.keySet().toArray(new String[0]));
+    }
+
+    /**
+     * Select certains rows and columns by names 
+     * <br>
+     * these names are not Excel A1,B1 names.
+     * <br>
+     * 
+     * @param rowLabels Basic String Array (String[]) for row names 
+     * @param colLabels Basic String Array (String[]) for column names 
+     * @return New Dataframe with only the selected data
+     */
+    public DataFrame getByLabels(String[] rowLabels, String[] colLabels) {
+        List<String> newIndex = new ArrayList<>();
+        Map<String, List<Object>> newColumns = new LinkedHashMap<>();
+
+        // Filter rows
+        List<Integer> rowIndices = new ArrayList<>();
+        for (String label : rowLabels) {
+            int idx = index.indexOf(label);
+            if (idx != -1) rowIndices.add(idx);
+        }
+
+        // Filter columns
+        for (String col : colLabels) {
+            if (columns.containsKey(col)) {
+                List<Object> newColumn = new ArrayList<>();
+                for (int rowIdx : rowIndices) {
+                    newColumn.add(columns.get(col).get(rowIdx));
+                }
+                newColumns.put(col, newColumn);
+            }
+        }
+
+        // Create new index
+        for (int rowIdx : rowIndices) {
+            newIndex.add(index.get(rowIdx));
+        }
+
+        return new DataFrame(newIndex, newColumns);
+    }
+
+    /**
+     * Select Cell by row and column positions 
+     * <br>
+     * 
+     * @param rowIdx row position
+     * @param colIdx column position
+     * @return Object for cell value (String, Float, Double)
+     */
+    public Object getByPosition(int rowIdx, int colIdx) {
+        if (rowIdx < 0 || rowIdx >= index.size()) throw new IndexOutOfBoundsException("Row index out of bounds");
+        String colName = new ArrayList<>(columns.keySet()).get(colIdx);
+        return columns.get(colName).get(rowIdx);
+    }
+
+    /**
+     * Select certains rows position
+     * <br>
+     * 
+     * @param rowIndices Basic Integer Array (int[]) for row positions
+     * @return New Dataframe with only the selected data
+     */
+    public DataFrame getRowsByPosition(int... rowIndices) {
+        return getByPositions(rowIndices, IntStream.range(0, columns.size()).toArray());
+    }
+
+    /**
+     * Select certains rows and columns by position
+     * <br>
+     * 
+     * @param rowIndices Basic Integer Array (int[]) for row positions
+     * @param colIndices Basic Integer Array (int[]) for column positions
+     * @return New Dataframe with only the selected data
+     */
+    public DataFrame getByPositions(int[] rowIndices, int[] colIndices) {
+        List<String> newIndex = new ArrayList<>();
+        Map<String, List<Object>> newColumns = new LinkedHashMap<>();
+
+        // Get column names in order
+        List<String> columnNames = new ArrayList<>(columns.keySet());
+
+        if(rowIndices.length == 0){
+            rowIndices = IntStream.range(0, columns.keySet().size()-1).toArray();
+        }
+        // Filter rows
+        for (int rowIdx : rowIndices) {
+            if (rowIdx >= 0 && rowIdx < index.size()) {
+                newIndex.add(index.get(rowIdx));
+            }
+        }
+
+        // Filter columns
+        for (int colIdx : colIndices) {
+            if (colIdx >= 0 && colIdx < columnNames.size()) {
+                String colName = columnNames.get(colIdx);
+                List<Object> newColumn = new ArrayList<>();
+                for (int rowIdx : rowIndices) {
+                    if (rowIdx >= 0 && rowIdx < index.size()) {
+                        newColumn.add(columns.get(colName).get(rowIdx));
+                    }
+                }
+                newColumns.put(colName, newColumn);
+            }
+        }
+
+        return new DataFrame(newIndex, newColumns);
+    }
+
+    /**
+     * Select using builder pattern
+     * <br>
+     * use like that example <br>
+     * select().rows(new int[]{1,2,3}).columns(new int[]{1,2,3}).get() <br>
+     * or <br>
+     * select().rows(new String[]{"row1","row2","row3"}).columns(new String[]{"column1","column2","column3"}).get()
+     * <br>
+     * 
+     * @return Selection Builder Object
+     */
+    public DataSelector select() {
+        return new DataSelector(this);
     }
 
 
