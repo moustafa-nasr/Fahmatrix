@@ -97,7 +97,32 @@ public class DataFrame {
     }
 
     /**
+     * Select Columns by name 
+     * <br>
+     * this method assumes you selected all rows
+     * <br>
+     * 
+     * @param columnLabels Basic String Array (String[]) for column names
+     * @return New Dataframe with only the selected data
+     */
+    public DataFrame getColumnsByLabel(String... columnLabels){
+        return getByLabels(new String[0], columnLabels);
+    }
+
+    /**
+     * Select certains columns position
+     * <br>
+     * 
+     * @param columnIndices Basic Integer Array (int[]) for columns position
+     * @return New Dataframe with only the selected datas
+     */
+    public DataFrame getColumnsByPosition(int... columnIndices){
+        return getByPositions(new int[0], columnIndices);
+    }
+
+    /**
      * Return the first 5 rows as DataFrame Object
+     * <br>
      * 
      * @return first 5 rows
      */
@@ -107,6 +132,7 @@ public class DataFrame {
 
     /**
      * Return the first n rows as DataFrame Object
+     * <br>
      * 
      * @param n the max number of rows to return
      * @return rows
@@ -131,6 +157,7 @@ public class DataFrame {
 
     /**
      * Return the last 5 rows as DataFrame Object
+     * <br>
      * 
      * @return last 5 rows
      */
@@ -140,6 +167,7 @@ public class DataFrame {
 
     /**
      * Return the last n rows as DataFrame Object
+     * <br>
      * 
      * @param n the max number of rows to return
      * @return rows
@@ -195,7 +223,7 @@ public class DataFrame {
     }
 
     /**
-     * Select Cell by row and column names 
+     * Select Cell by row and column name
      * <br>
      * 
      * @param rowLabel row name
@@ -211,12 +239,12 @@ public class DataFrame {
     }
 
     /**
-     * Select Rows by names 
+     * Select Rows by name
      * <br>
      * this method assumes you selected all columns
      * <br>
      * 
-     * @param rowLabels Basic String Array (String[]) for row names 
+     * @param rowLabels Basic String Array (String[]) for rows name
      * @return New Dataframe with only the selected data
      */
     public DataFrame getRowsByLabel(String... rowLabels) {
@@ -224,7 +252,7 @@ public class DataFrame {
     }
 
     /**
-     * Select certains rows and columns by names 
+     * Select certains rows and columns by name
      * <br>
      * these names are not Excel A1,B1 names.
      * <br>
