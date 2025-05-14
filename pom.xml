@@ -5,7 +5,7 @@
 
   <groupId>com.fahmatrix</groupId>
   <artifactId>fahmatrix</artifactId>
-  <version>0.1.0</version>
+  <version>0.1.2</version>
   <name>Fahmatrix</name>
   <description>Fahmatrix is a lightweight, modern Java library for working with tabular data, inspired by Python's Pandas and rooted in the idea of making data understanding (fahm) easy on the JVM. </description>
   <url>https://github.com/moustafa-nasr/fahmatrix</url>

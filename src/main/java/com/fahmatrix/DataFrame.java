@@ -20,6 +20,7 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Print data Summary <br>
  * Import From CSV/TSV, xlsx <br>
  * Reverse (transpose) data <br>
+ * Select Row/Column by Label or Position <br>
  */
 public class DataFrame {
 
@@ -62,7 +63,8 @@ public class DataFrame {
      */
     public DataFrame(List<String> index, Map<String, List<Object>> columns) {
         // if (index.size() != columns.size()) {
-        //     throw new IllegalArgumentException("Values and index must be same length "+index.size()+" != "+columns.size());
+        // throw new IllegalArgumentException("Values and index must be same length
+        // "+index.size()+" != "+columns.size());
         // }
         this.columns = columns;
         this.index = index;
@@ -97,7 +99,7 @@ public class DataFrame {
     }
 
     /**
-     * Select Columns by name 
+     * Select Columns by name
      * <br>
      * this method assumes you selected all rows
      * <br>
@@ -105,7 +107,7 @@ public class DataFrame {
      * @param columnLabels Basic String Array (String[]) for column names
      * @return New Dataframe with only the selected data
      */
-    public DataFrame getColumnsByLabel(String... columnLabels){
+    public DataFrame getColumnsByLabel(String... columnLabels) {
         return getByLabels(new String[0], columnLabels);
     }
 
@@ -116,7 +118,7 @@ public class DataFrame {
      * @param columnIndices Basic Integer Array (int[]) for columns position
      * @return New Dataframe with only the selected datas
      */
-    public DataFrame getColumnsByPosition(int... columnIndices){
+    public DataFrame getColumnsByPosition(int... columnIndices) {
         return getByPositions(new int[0], columnIndices);
     }
 
@@ -232,9 +234,11 @@ public class DataFrame {
      */
     public Object getByLabel(String rowLabel, String colLabel) {
         int rowIdx = index.indexOf(rowLabel);
-        if (rowIdx == -1) throw new IllegalArgumentException("Row label not found");
+        if (rowIdx == -1)
+            throw new IllegalArgumentException("Row label not found");
         List<Object> column = columns.get(colLabel);
-        if (column == null) throw new IllegalArgumentException("Column label not found");
+        if (column == null)
+            throw new IllegalArgumentException("Column label not found");
         return column.get(rowIdx);
     }
 
@@ -257,8 +261,8 @@ public class DataFrame {
      * these names are not Excel A1,B1 names.
      * <br>
      * 
-     * @param rowLabels Basic String Array (String[]) for row names 
-     * @param colLabels Basic String Array (String[]) for column names 
+     * @param rowLabels Basic String Array (String[]) for row names
+     * @param colLabels Basic String Array (String[]) for column names
      * @return New Dataframe with only the selected data
      */
     public DataFrame getByLabels(String[] rowLabels, String[] colLabels) {
@@ -269,7 +273,8 @@ public class DataFrame {
         List<Integer> rowIndices = new ArrayList<>();
         for (String label : rowLabels) {
             int idx = index.indexOf(label);
-            if (idx != -1) rowIndices.add(idx);
+            if (idx != -1)
+                rowIndices.add(idx);
         }
 
         // Filter columns
@@ -292,7 +297,7 @@ public class DataFrame {
     }
 
     /**
-     * Select Cell by row and column positions 
+     * Select Cell by row and column positions
      * <br>
      * 
      * @param rowIdx row position
@@ -300,7 +305,8 @@ public class DataFrame {
      * @return Object for cell value (String, Float, Double)
      */
     public Object getByPosition(int rowIdx, int colIdx) {
-        if (rowIdx < 0 || rowIdx >= index.size()) throw new IndexOutOfBoundsException("Row index out of bounds");
+        if (rowIdx < 0 || rowIdx >= index.size())
+            throw new IndexOutOfBoundsException("Row index out of bounds");
         String colName = new ArrayList<>(columns.keySet()).get(colIdx);
         return columns.get(colName).get(rowIdx);
     }
@@ -331,8 +337,8 @@ public class DataFrame {
         // Get column names in order
         List<String> columnNames = new ArrayList<>(columns.keySet());
 
-        if(rowIndices.length == 0){
-            rowIndices = IntStream.range(0, columns.keySet().size()-1).toArray();
+        if (rowIndices.length == 0) {
+            rowIndices = IntStream.range(0, columns.keySet().size() - 1).toArray();
         }
         // Filter rows
         for (int rowIdx : rowIndices) {
@@ -364,7 +370,8 @@ public class DataFrame {
      * use like that example <br>
      * select().rows(new int[]{1,2,3}).columns(new int[]{1,2,3}).get() <br>
      * or <br>
-     * select().rows(new String[]{"row1","row2","row3"}).columns(new String[]{"column1","column2","column3"}).get()
+     * select().rows(new String[]{"row1","row2","row3"}).columns(new
+     * String[]{"column1","column2","column3"}).get()
      * <br>
      * 
      * @return Selection Builder Object
@@ -372,7 +379,6 @@ public class DataFrame {
     public DataSelector select() {
         return new DataSelector(this);
     }
-
 
     /**
      * Pretty Print in System Console

@@ -12,7 +12,8 @@ import java.util.Map;
 
 /**
  * CsvImporter is the basic logic for handling CSV import operations
- * <br><br>
+ * <br>
+ * <br>
  * Current Features: <br>
  * Support CSV/TSV files <br>
  * Supports , \t ; | # : delimiters <br>
@@ -35,8 +36,10 @@ public class CsvImporter {
 
     /**
      * Main Read CSV method <br>
-     * Auto Switch from In-Memory read (fast) to Streaming read (slow but memory efficient) according to file size 
+     * Auto Switch from In-Memory read (fast) to Streaming read (slow but memory
+     * efficient) according to file size
      * <br>
+     * 
      * @param filePath file path as a string
      * @throws IOException error parsing file
      */
@@ -61,6 +64,7 @@ public class CsvImporter {
     /**
      * In-Memory read for fast and small files
      * <br>
+     * 
      * @param filePath file path as a string
      * @throws IOException error parsing file
      */
@@ -84,6 +88,7 @@ public class CsvImporter {
     /**
      * Stream read for large files
      * <br>
+     * 
      * @param filePath file path as a string
      * @throws IOException error parsing file
      */
@@ -112,6 +117,7 @@ public class CsvImporter {
      * Supports ',', '\t', ';', '|', '#',':' delimiters
      * Handles quotes
      * <br>
+     * 
      * @param sampleLine one line of data
      * @return CSVformat Object
      */
@@ -142,6 +148,7 @@ public class CsvImporter {
      * Parse single line into String Array logic <br>
      * used in header detection and before converting into column
      * <br>
+     * 
      * @param line   one line of data
      * @param format current file format
      * @return Basic Array of cells data
@@ -181,6 +188,7 @@ public class CsvImporter {
     /**
      * Initialize Columns according to detected headers
      * <br>
+     * 
      * @param headers Array of headers
      */
     private void initializeColumns(String[] headers) {
@@ -193,6 +201,7 @@ public class CsvImporter {
     /**
      * Parse and convert single line into column logic
      * <br>
+     * 
      * @param line    one line of data
      * @param format  current file format
      * @param headers Array of headers
@@ -209,6 +218,7 @@ public class CsvImporter {
      * Supports String, Integer And Double <br>
      * Future Feature: Date and Time <br>
      * <br>
+     * 
      * @param value cell value
      * @return proper object
      */
@@ -231,6 +241,7 @@ public class CsvImporter {
      * Count the number of occurrences for certain character in string <br>
      * Used to detect the delimiter
      * <br>
+     * 
      * @param str single line from the csv file
      * @param ch  delimiter character
      * @return number of occurances
@@ -261,6 +272,7 @@ public class CsvImporter {
     /**
      * Get the parsed columns
      * <br>
+     * 
      * @return parsed columns
      */
     public Map<String, List<Object>> getColumns() {
@@ -270,6 +282,7 @@ public class CsvImporter {
     /**
      * Get the parsed index
      * <br>
+     * 
      * @return parsed index
      */
     public List<String> getIndex() {
