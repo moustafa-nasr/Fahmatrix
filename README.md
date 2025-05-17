@@ -1,4 +1,11 @@
-# Fahmatrix
+# Fahmatrix [![Version](https://img.shields.io/badge/version-0.1.3-yellow)](https://github.com/moustafa-nasr/fahmatrix/releases)
+[![Docs](https://img.shields.io/badge/Javadoc-online-blue)](https://moustafa-nasr.github.io/Fahmatrix/)  [![Java](https://img.shields.io/badge/Java-17+-brightgreen?logo=java)](https://openjdk.org/) [![Platform](https://img.shields.io/badge/Platform-JVM-lightgrey)]() [![License](https://img.shields.io/github/license/moustafa-nasr/fahmatrix)](https://github.com/moustafa-nasr/fahmatrix/blob/main/LICENSE)
+[![Star](https://img.shields.io/github/stars/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/stargazers) [![Fork](https://img.shields.io/github/forks/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/forks) [![Watch](https://img.shields.io/github/watchers/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/watchers)
+
+[![Tweet](https://img.shields.io/badge/Tweet-Fahmatrix-blue?logo=twitter)](https://twitter.com/intent/tweet?text=Just%20discovered%20Fahmatrix%20%E2%80%94%20a%20lightweight%2C%20Pandas-like%20Java%20library%20for%20tabular%20data%20%F0%9F%93%8A%F0%9F%94%A5%0Ahttps%3A%2F%2Fgithub.com%2Fmoustafa-nasr%2Ffahmatrix)
+
+
+
 
 **Fahmatrix** is a lightweight, modern Java library for working with tabular data, inspired by Python's Pandas and rooted in the idea of making data understanding (*fahm*) easy on the JVM.
 
@@ -81,3 +88,4 @@ If you find Fahmatrix useful, consider [sponsoring me](https://github.com/sponso
 ## 📝 License
 
 MIT License. Use it freely in your projects.
+
