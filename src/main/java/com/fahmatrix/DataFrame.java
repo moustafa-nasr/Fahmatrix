@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
+import com.fahmatrix.Exporters.CsvExporter;
 import com.fahmatrix.Helpers.DataSelector;
 import com.fahmatrix.Importers.CsvImporter;
 import com.fahmatrix.Importers.SimpleXlsxImporter;
@@ -556,6 +557,37 @@ public class DataFrame {
         }
         return this;
     }
+
+    /**
+     * Exports data to a csv file<br>
+     * It useds default delimiter "," and hasQoutes is set to true
+     * Note: the data is stored by column based and the writing is rows based. so the data is transposed before exporting.
+     * <br>
+     * 
+     * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\customers-edited.csv"
+     */
+    public void writeCSV(String filePath){
+        writeCSV(filePath,',',true);
+    }
+
+    /**
+     * Exports data to a csv file<br>
+     * Note: the data is stored by column based and the writing is rows based. so the data is transposed before exporting.
+     * <br>
+     * 
+     * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\customers-edited.csv"
+     * @param delimiter the csv value delimter ex: ',' or ';' or '|'
+     * @param hasQuotes either wrap the values within qoutes or not
+     */
+    public void writeCSV(String filePath,char delimiter, boolean hasQuotes){
+        try {
+            CsvExporter csvExporter = new CsvExporter(filePath, delimiter, hasQuotes);
+            csvExporter.saveCSV(columns);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Read , Parse and save the Microsoft Excel SpreadSheet xlsx file<br>

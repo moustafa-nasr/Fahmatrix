@@ -7,8 +7,8 @@ import com.fahmatrix.Helpers.DataSelector;
 public class BasicSelectExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.1.jar" .\examples\BasicSelectExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.1.jar;examples" BasicSelectExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.2.jar" .\examples\BasicSelectExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.2.jar;examples" BasicSelectExample
      * 
      */
     
@@ -25,6 +25,7 @@ public class BasicSelectExample {
         DataFrame result = df.getRowsByPosition(new int[]{1,2,3,5,6,8,110,10000,99});
         result = result.getByPositions(new int[0],new int[]{1,2,5});
         result.print();
+        result.writeCSV(".\\examples\\exampleFiles\\customers-edited.csv");
         
         // One line Select using builder pattern
         df.select().rows(new int[]{1,2,3,5,6,8,110,10000,99}).columns(new int[]{1,2,5}).get().print();
