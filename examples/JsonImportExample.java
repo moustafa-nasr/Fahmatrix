@@ -17,5 +17,11 @@ public class JsonImportExample {
         DataFrame json1 = new DataFrame();
 		json1.readJson(".\\examples\\exampleFiles\\small_data.json");
 		json1.print();
+
+
+        DataFrame df = new DataFrame();
+		df.addColumn("age", Arrays.asList(25, 30, 35));
+		df.addColumn("name", Arrays.asList("Alice", "Bob", "Charlie"));
+        df.writeJson(".\\examples\\exampleFiles\\small_data_edited.json");
     }
 }

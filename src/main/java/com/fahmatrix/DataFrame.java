@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.IntStream;
 
 import com.fahmatrix.Exporters.CsvExporter;
+import com.fahmatrix.Exporters.JsonExporter;
 import com.fahmatrix.Helpers.DataSelector;
 import com.fahmatrix.Importers.CsvImporter;
 import com.fahmatrix.Importers.JsonImporter;
@@ -562,7 +563,6 @@ public class DataFrame {
     /**
      * Exports data to a csv file<br>
      * It useds default delimiter "," and hasQoutes is set to true
-     * Note: the data is stored by column based and the writing is rows based. so the data is transposed before exporting.
      * <br>
      * 
      * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\customers-edited.csv"
@@ -573,7 +573,6 @@ public class DataFrame {
 
     /**
      * Exports data to a csv file<br>
-     * Note: the data is stored by column based and the writing is rows based. so the data is transposed before exporting.
      * <br>
      * 
      * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\customers-edited.csv"
@@ -614,6 +613,25 @@ public class DataFrame {
         return this;
     }
 
+    /**
+     * Read , Parse and save the JSON file<br>
+     * Make sure the file is found before calling. And it has a proper JSON format <br>
+     * All data are saved in the same object no need to create a new one <br>
+     * <br>
+     * Note: it replace any old data <br>
+     * Note: it supports simple JSON data. (no nesting) <br>
+     * <br>
+     * example of JSON data.
+     * [
+     *   {"age": 25, "name": "Alice"},
+     *   {"age": 30, "name": "Bob"},
+     *   {"age": 35, "name": "Charlie"}
+     * ]
+     * <br>
+     * 
+     * @param filePath JSON file path
+     * @return the same object after saving data (this) if successful <br>
+     */
     public DataFrame readJson(String filePath) {
         try {
             JsonImporter jsonObject = new JsonImporter();
@@ -625,5 +643,21 @@ public class DataFrame {
         }
         return this;
     }
+
+    /**
+     * Exports data to a JSON txt file<br>
+     * <br>
+     * 
+     * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\small_data.json"
+     */
+    public void writeJson(String filePath){
+        try {
+            JsonExporter jsonExporter = new JsonExporter(filePath);
+            jsonExporter.saveJSON(columns);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
     // Add more operations as needed
 }
