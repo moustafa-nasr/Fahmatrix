@@ -21,7 +21,8 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Select/Add column data <br>
  * Print in System Console <br>
  * Print data Summary <br>
- * Import From CSV/TSV, xlsx <br>
+ * Import From CSV/TSV, xlsx, JSON <br>
+ * Export To CSV/TSV, JSON <br>
  * Reverse (transpose) data <br>
  * Select Row/Column by Label or Position <br>
  */

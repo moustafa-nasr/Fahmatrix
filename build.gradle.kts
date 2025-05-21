@@ -30,6 +30,7 @@ tasks.test {
 
 tasks.javadoc {
     exclude("com/fahmatrix/Importers/**")
+    exclude("com/fahmatrix/Exporters/**")
     exclude("com/fahmatrix/Helpers/**")
     exclude("examples/**")
 }
