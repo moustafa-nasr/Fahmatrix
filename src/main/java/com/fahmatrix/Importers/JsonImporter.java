@@ -30,7 +30,7 @@ public class JsonImporter {
     private void readJSONInMemory(String filePath) throws IOException {
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
         content = content.trim();
-        
+
         if (content.startsWith("[")) {
             parseJsonArray(content);
         } else {
@@ -58,8 +58,10 @@ public class JsonImporter {
                 if (insideObject) {
                     sb.append(line);
                     for (char c : line.toCharArray()) {
-                        if (c == '{') braceCount++;
-                        else if (c == '}') braceCount--;
+                        if (c == '{')
+                            braceCount++;
+                        else if (c == '}')
+                            braceCount--;
                     }
 
                     if (braceCount == 0) {
@@ -105,7 +107,8 @@ public class JsonImporter {
     private Map<String, Object> parseFlatJsonObject(String json) {
         Map<String, Object> result = new LinkedHashMap<>();
         json = json.trim();
-        if (!json.startsWith("{") || !json.endsWith("}")) return result;
+        if (!json.startsWith("{") || !json.endsWith("}"))
+            return result;
 
         json = json.substring(1, json.length() - 1); // remove braces
 
@@ -144,7 +147,8 @@ public class JsonImporter {
 
         for (String pair : pairs) {
             int colonIdx = pair.indexOf(':');
-            if (colonIdx == -1) continue;
+            if (colonIdx == -1)
+                continue;
 
             String rawKey = pair.substring(0, colonIdx).trim();
             String rawValue = pair.substring(colonIdx + 1).trim();
@@ -185,7 +189,8 @@ public class JsonImporter {
     }
 
     private String unquote(String str) {
-        if (str == null || str.length() < 2) return str;
+        if (str == null || str.length() < 2)
+            return str;
         if (str.startsWith("\"") && str.endsWith("\"")) {
             return str.substring(1, str.length() - 1).replace("\\\"", "\"");
         }

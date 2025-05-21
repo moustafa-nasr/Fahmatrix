@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "com.fahmatrix" // Replace with your group
-version = "0.1.2"
+version = "0.1.3"
 
 java {
     toolchain {

@@ -7,8 +7,8 @@ import com.fahmatrix.Helpers.DataSelector;
 public class BasicSelectExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.2.jar" .\examples\BasicSelectExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.2.jar;examples" BasicSelectExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.3.jar" .\examples\BasicSelectExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.3.jar;examples" BasicSelectExample
      * 
      */
     

@@ -565,21 +565,23 @@ public class DataFrame {
      * It useds default delimiter "," and hasQoutes is set to true
      * <br>
      * 
-     * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\customers-edited.csv"
+     * @param filePath full file path to save ex:
+     *                 ".\\examples\\exampleFiles\\customers-edited.csv"
      */
-    public void writeCSV(String filePath){
-        writeCSV(filePath,',',true);
+    public void writeCSV(String filePath) {
+        writeCSV(filePath, ',', true);
     }
 
     /**
      * Exports data to a csv file<br>
      * <br>
      * 
-     * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\customers-edited.csv"
+     * @param filePath  full file path to save ex:
+     *                  ".\\examples\\exampleFiles\\customers-edited.csv"
      * @param delimiter the csv value delimter ex: ',' or ';' or '|'
      * @param hasQuotes either wrap the values within qoutes or not
      */
-    public void writeCSV(String filePath,char delimiter, boolean hasQuotes){
+    public void writeCSV(String filePath, char delimiter, boolean hasQuotes) {
         try {
             CsvExporter csvExporter = new CsvExporter(filePath, delimiter, hasQuotes);
             csvExporter.saveCSV(columns);
@@ -587,7 +589,6 @@ public class DataFrame {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Read , Parse and save the Microsoft Excel SpreadSheet xlsx file<br>
@@ -615,7 +616,8 @@ public class DataFrame {
 
     /**
      * Read , Parse and save the JSON file<br>
-     * Make sure the file is found before calling. And it has a proper JSON format <br>
+     * Make sure the file is found before calling. And it has a proper JSON format
+     * <br>
      * All data are saved in the same object no need to create a new one <br>
      * <br>
      * Note: it replace any old data <br>
@@ -623,9 +625,9 @@ public class DataFrame {
      * <br>
      * example of JSON data.
      * [
-     *   {"age": 25, "name": "Alice"},
-     *   {"age": 30, "name": "Bob"},
-     *   {"age": 35, "name": "Charlie"}
+     * {"age": 25, "name": "Alice"},
+     * {"age": 30, "name": "Bob"},
+     * {"age": 35, "name": "Charlie"}
      * ]
      * <br>
      * 
@@ -648,9 +650,10 @@ public class DataFrame {
      * Exports data to a JSON txt file<br>
      * <br>
      * 
-     * @param filePath full file path to save ex: ".\\examples\\exampleFiles\\small_data.json"
+     * @param filePath full file path to save ex:
+     *                 ".\\examples\\exampleFiles\\small_data.json"
      */
-    public void writeJson(String filePath){
+    public void writeJson(String filePath) {
         try {
             JsonExporter jsonExporter = new JsonExporter(filePath);
             jsonExporter.saveJSON(columns);

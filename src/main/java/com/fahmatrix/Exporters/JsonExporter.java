@@ -8,9 +8,9 @@ import java.util.*;
  * <br>
  * ex: small_data.json
  * [
- *  {"age": 25, "name": "Alice"},
- *  {"age": 30, "name": "Bob"},
- *  {"age": 35, "name": "Charlie"}
+ * {"age": 25, "name": "Alice"},
+ * {"age": 30, "name": "Bob"},
+ * {"age": 35, "name": "Charlie"}
  * ]
  * 
  */
@@ -50,6 +50,7 @@ public class JsonExporter {
      * <br>
      *
      * @param columns Map of column names to values
+     * @throws IOException if failed to write to file
      */
     public void saveJSON(Map<String, List<Object>> columns) throws IOException {
 
@@ -107,7 +108,8 @@ public class JsonExporter {
     }
 
     /**
-     * Converts object to JSON value as a string, So it can be printed easily without losing it's type
+     * Converts object to JSON value as a string, So it can be printed easily
+     * without losing it's type
      * <br>
      * 
      * @param value Object to be converted
@@ -132,12 +134,11 @@ public class JsonExporter {
      */
     private String escapeString(String input) {
         return input.replace("\\", "\\\\")
-                    .replace("\"", "\\\"")
-                    .replace("\b", "\\b")
-                    .replace("\f", "\\f")
-                    .replace("\n", "\\n")
-                    .replace("\r", "\\r")
-                    .replace("\t", "\\t");
+                .replace("\"", "\\\"")
+                .replace("\b", "\\b")
+                .replace("\f", "\\f")
+                .replace("\n", "\\n")
+                .replace("\r", "\\r")
+                .replace("\t", "\\t");
     }
 }
-

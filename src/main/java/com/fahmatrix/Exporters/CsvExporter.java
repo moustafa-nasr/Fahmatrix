@@ -4,13 +4,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
-import java.util.Comparator;
 
 /**
  * A class responsible for exporting data in CSV format.
@@ -34,7 +29,8 @@ public class CsvExporter {
 
     /**
      * Constructs a new CsvExporter instance with the specified file name,
-     * delimiter and hasQuotes flags. The delimiter is used to separate fields in the CSV file.
+     * delimiter and hasQuotes flags. The delimiter is used to separate fields in
+     * the CSV file.
      *
      * @param fileName  the file name to export
      * @param delimiter the character used as field separator (default: ',')
@@ -64,21 +60,21 @@ public class CsvExporter {
         this.fileName = fileName;
     }
 
-    
     /**
      * Save CSV data to file
      * <br>
      *
      * @param columns Map of column names to values
+     * @throws IOException if failed to write to file
      */
     public void saveCSV(Map<String, List<Object>> columns) throws IOException {
 
         // 1. Create parent directories if they don't exist
         File file = new File(fileName);
         File parentDir = file.getParentFile();
-        
-        if (parentDir != null) {  // Check if path has parent directories
-            parentDir.mkdirs();   // Create all necessary parent directories
+
+        if (parentDir != null) { // Check if path has parent directories
+            parentDir.mkdirs(); // Create all necessary parent directories
         }
 
         // 2. Create the file if it doesn't exist
@@ -97,25 +93,23 @@ public class CsvExporter {
                 String tmpValue = headers[i];
 
                 if (hasQuotes) {
-                        tmpValue.replace("\"", "\"\"");
-                        writer.print("\"" + tmpValue + "\"");
-                    } else {
-                        writer.print(tmpValue);
-                    }
+                    tmpValue.replace("\"", "\"\"");
+                    writer.print("\"" + tmpValue + "\"");
+                } else {
+                    writer.print(tmpValue);
+                }
                 if (i < headers.length - 1) {
                     writer.print(delimiter);
                 }
             }
             writer.println();
 
-
-            
             // iteration 1: trasposed data before output
             // Write data using parallelStream() for better performance with large datasets
             int longestColumnData = columns.values().stream()
-                .mapToInt(List::size)
-                .max()
-                .orElse(0);
+                    .mapToInt(List::size)
+                    .max()
+                    .orElse(0);
 
             for (int currentIndex = 0; currentIndex < longestColumnData; currentIndex++) {
                 for (int i = 0; i < headers.length; i++) {
@@ -123,9 +117,10 @@ public class CsvExporter {
                     boolean isLast = (i == headers.length - 1);
 
                     Object value = columns.get(string).get(currentIndex);
-                    String tmpValue = value !=null ? value.toString():"null";
-                    
-                    // TODO escape newline, commas(delimiter) and double qoutes https://datatracker.ietf.org/doc/html/rfc4180#page-2
+                    String tmpValue = value != null ? value.toString() : "null";
+
+                    // TODO escape newline, commas(delimiter) and double qoutes
+                    // https://datatracker.ietf.org/doc/html/rfc4180#page-2
                     if (hasQuotes) {
                         tmpValue.replace("\"", "\"\"");
                         writer.print("\"" + tmpValue + "\"");
@@ -139,30 +134,27 @@ public class CsvExporter {
                 writer.println();
             }
 
-
             // iteration 2: data output must be transposed before calling saveCSV
             // Write data using parallelStream() for better performance with large datasets
             // columns.values().stream().parallel().forEachOrdered(values -> {
-            //     for (Object value : values) {
+            // for (Object value : values) {
 
-            //         String tmpValue = value.toString();
+            // String tmpValue = value.toString();
 
-            //         // TODO escape newline, commas(delimiter) and double qoutes https://datatracker.ietf.org/doc/html/rfc4180#page-2
-            //         if (hasQuotes) {
-            //             tmpValue.replace("\"", "\"\"");
-            //             writer.print("\"" + tmpValue + "\"");
-            //         } else {
-            //             writer.print(tmpValue);
-            //         }
-            //         if (values.indexOf(value) < values.size() - 1) {
-            //             writer.print(delimiter);
-            //         }
-            //     }
-            //     writer.println();
+            // // TODO escape newline, commas(delimiter) and double qoutes
+            // https://datatracker.ietf.org/doc/html/rfc4180#page-2
+            // if (hasQuotes) {
+            // tmpValue.replace("\"", "\"\"");
+            // writer.print("\"" + tmpValue + "\"");
+            // } else {
+            // writer.print(tmpValue);
+            // }
+            // if (values.indexOf(value) < values.size() - 1) {
+            // writer.print(delimiter);
+            // }
+            // }
+            // writer.println();
             // });
-            
-            
-
 
         }
     }
