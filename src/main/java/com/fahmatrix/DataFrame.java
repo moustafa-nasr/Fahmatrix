@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import com.fahmatrix.Exporters.CsvExporter;
 import com.fahmatrix.Helpers.DataSelector;
 import com.fahmatrix.Importers.CsvImporter;
+import com.fahmatrix.Importers.JsonImporter;
 import com.fahmatrix.Importers.SimpleXlsxImporter;
 
 /**
@@ -613,5 +614,16 @@ public class DataFrame {
         return this;
     }
 
+    public DataFrame readJson(String filePath) {
+        try {
+            JsonImporter jsonObject = new JsonImporter();
+            jsonObject.readJSON(filePath);
+            columns = jsonObject.getColumns();
+            index = jsonObject.getIndex();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
     // Add more operations as needed
 }

@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Jane Smith",
+    "address": "123 Maple Street",
+    "city": "Pretendville",
+    "state": "NY",
+    "zip": "12345"
+  },
+  {
+    "name": "John Smith",
+    "address": "123 Maple Street",
+    "city": "Pretendville",
+    "state": "NY",
+    "zip": "12345"
+  },
+  {
+    "name": "John Smith",
+    "address": "123 Maple Street",
+    "city": "Pretendville",
+    "state": "NY",
+    "zip": "12345"
+  },
+  {
+    "name": "John Smith",
+    "address": "123 Maple Street",
+    "city": "Pretendville",
+    "zip": "12345"
+  }
+]
