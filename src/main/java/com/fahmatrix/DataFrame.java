@@ -8,10 +8,12 @@ import java.util.stream.IntStream;
 
 import com.fahmatrix.Exporters.CsvExporter;
 import com.fahmatrix.Exporters.JsonExporter;
+import com.fahmatrix.Exporters.OdsExporter;
 import com.fahmatrix.Exporters.XlsxExporter;
 import com.fahmatrix.Helpers.DataSelector;
 import com.fahmatrix.Importers.CsvImporter;
 import com.fahmatrix.Importers.JsonImporter;
+import com.fahmatrix.Importers.SimpleOdsImporter;
 import com.fahmatrix.Importers.SimpleXlsxImporter;
 
 
@@ -633,6 +635,49 @@ public class DataFrame {
             e.printStackTrace();
         }
     }
+
+    
+    /**
+     * Read , Parse and save ODS (OpenDocument Spreadsheet) file<br>
+     * Make sure the file is found before calling. <br>
+     * All data are saved in the same object no need to create a new one <br>
+     * <br>
+     * Note: it replace any old data <br>
+     * <br>
+     * 
+     * @param filePath ods file path
+     * @return the same object after saving data (this) if successful
+     *         <br>
+     */
+    public DataFrame readOds(String filePath) {
+        try {
+            SimpleOdsImporter odsObject = new SimpleOdsImporter();
+            odsObject.readOds(filePath);
+            columns = odsObject.getColumns();
+            index = odsObject.getIndex();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return this;
+    }
+
+    /**
+     * Exports data to an ODS (OpenDocument Spreadsheet) file<br>
+     * The data is in the default sheet with name "sheet1"
+     * <br>
+     * 
+     * @param filePath full file path to save ex:
+     *                 ".\\examples\\exampleFiles\\small_data.ods"
+     */
+    public void writeOds(String filePath) {
+        try {
+            OdsExporter odsExporter = new OdsExporter(filePath);
+            odsExporter.saveODS(columns);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * Read , Parse and save the JSON file<br>
