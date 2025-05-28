@@ -16,7 +16,6 @@ import com.fahmatrix.Importers.JsonImporter;
 import com.fahmatrix.Importers.SimpleOdsImporter;
 import com.fahmatrix.Importers.SimpleXlsxImporter;
 
-
 /**
  * DataFrame is the basic object for hadling data
  * <br>
@@ -25,18 +24,13 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Select/Add column data <br>
  * Print in System Console <br>
  * Print data Summary <br>
- * Import From CSV/TSV, xlsx, JSON <br>
- * Export To CSV/TSV, JSON <br>
+ * Import From CSV/TSV, xlsx, Ods, JSON <br>
+ * Export To CSV/TSV, xlsx, Ods, JSON <br>
  * Reverse (transpose) data <br>
  * Select Row/Column by Label or Position <br>
  */
 public class DataFrame {
 
-    /*
-     * Current Features
-     * Print in System Console
-     * Import From CSV/TSV
-     */
 
     private Map<String, List<Object>> columns;
     private List<String> index;
@@ -636,7 +630,6 @@ public class DataFrame {
         }
     }
 
-    
     /**
      * Read , Parse and save ODS (OpenDocument Spreadsheet) file<br>
      * Make sure the file is found before calling. <br>
@@ -677,7 +670,6 @@ public class DataFrame {
             e.printStackTrace();
         }
     }
-
 
     /**
      * Read , Parse and save the JSON file<br>

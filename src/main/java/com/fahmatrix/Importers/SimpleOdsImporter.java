@@ -82,13 +82,13 @@ public class SimpleOdsImporter {
 
             try (InputStream stream = zip.getInputStream(contentEntry)) {
                 Document contentDoc = parseXml(stream);
-                
+
                 // Find the first table (sheet)
                 NodeList tableNodes = contentDoc.getElementsByTagName("table:table");
                 if (tableNodes.getLength() == 0) {
                     throw new Exception("No tables found in ODS file");
                 }
-                
+
                 Element table = (Element) tableNodes.item(0);
                 NodeList rowNodes = table.getElementsByTagName("table:table-row");
 
@@ -96,7 +96,7 @@ public class SimpleOdsImporter {
                     // First row = headers
                     Element firstRow = (Element) rowNodes.item(0);
                     NodeList headerCells = firstRow.getElementsByTagName("table:table-cell");
-                    
+
                     for (int i = 0; i < headerCells.getLength(); i++) {
                         Element cell = (Element) headerCells.item(i);
                         String header = getCellTextContent(cell);
@@ -111,9 +111,10 @@ public class SimpleOdsImporter {
 
                         // Handle repeated cells and columns-repeated attribute
                         int currentColumn = 0;
-                        for (int cellIdx = 0; cellIdx < cells.getLength() && currentColumn < headers.size(); cellIdx++) {
+                        for (int cellIdx = 0; cellIdx < cells.getLength()
+                                && currentColumn < headers.size(); cellIdx++) {
                             Element cell = (Element) cells.item(cellIdx);
-                            
+
                             // Check for columns-repeated attribute
                             String columnsRepeated = cell.getAttribute("table:number-columns-repeated");
                             int repeatCount = 1;
@@ -124,16 +125,16 @@ public class SimpleOdsImporter {
                                     repeatCount = 1;
                                 }
                             }
-                            
+
                             Object value = parseCellValue(cell);
-                            
+
                             // Add the value to appropriate columns (handling repetition)
                             for (int rep = 0; rep < repeatCount && currentColumn < headers.size(); rep++) {
                                 columnData.get(headers.get(currentColumn)).add(value);
                                 currentColumn++;
                             }
                         }
-                        
+
                         // Fill remaining columns with null if row is shorter
                         while (currentColumn < headers.size()) {
                             columnData.get(headers.get(currentColumn)).add(null);
@@ -184,11 +185,11 @@ public class SimpleOdsImporter {
     private Object parseCellValue(Element cell) {
         String valueType = cell.getAttribute("office:value-type");
         String textContent = getCellTextContent(cell);
-        
+
         if (textContent == null || textContent.trim().isEmpty()) {
             return null;
         }
-        
+
         // Handle different value types
         switch (valueType) {
             case "float":
@@ -205,7 +206,7 @@ public class SimpleOdsImporter {
                 } catch (NumberFormatException e) {
                     return textContent;
                 }
-                
+
             case "currency":
                 String currencyValue = cell.getAttribute("office:value");
                 if (!currencyValue.isEmpty()) {
@@ -216,7 +217,7 @@ public class SimpleOdsImporter {
                     }
                 }
                 return textContent;
-                
+
             case "percentage":
                 String percentValue = cell.getAttribute("office:value");
                 if (!percentValue.isEmpty()) {
@@ -227,28 +228,28 @@ public class SimpleOdsImporter {
                     }
                 }
                 return textContent;
-                
+
             case "date":
                 String dateValue = cell.getAttribute("office:date-value");
                 if (!dateValue.isEmpty()) {
                     return dateValue; // Return as string for now, can be enhanced to parse as Date
                 }
                 return textContent;
-                
+
             case "time":
                 String timeValue = cell.getAttribute("office:time-value");
                 if (!timeValue.isEmpty()) {
                     return timeValue; // Return as string for now
                 }
                 return textContent;
-                
+
             case "boolean":
                 String boolValue = cell.getAttribute("office:boolean-value");
                 if (!boolValue.isEmpty()) {
                     return Boolean.parseBoolean(boolValue);
                 }
                 return textContent;
-                
+
             case "string":
             default:
                 return textContent;

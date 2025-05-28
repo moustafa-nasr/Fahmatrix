@@ -11,8 +11,8 @@ Ideal for small projects, backend systems, or embedded environments like Android
 
 
 🚀 Intuitive API for tabular data  
-📄 Easy CSV, Xlsx, Json reading and previewing  
-📄 Easy CSV, Json writing
+📄 Easy CSV, Xlsx, Ods, Json reading and previewing  
+📄 Easy CSV, Xlsx, Ods, Json writing  
 🔍 Row filtering and column selection  
 📊 Aggregations, grouping, and sorting (coming soon)  
 🧩 No external dependencies (for now)
@@ -34,20 +34,50 @@ cd fahmatrix
 ./gradlew build
 ```
 
+or Test online
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/moustafa-nasr/Fahmatrix/blob/main/FahmatrixExample.ipynb)
+
+
 ---
 
-## 📚 Example Usage
+## 📚 Simple Example Usage
 
 ```java
 import com.fahmatrix.DataFrame;
 
 public class Main {
     public static void main(String[] args) {
+        // read csv file
         DataFrame df = DataFrame.readCSV("data.csv");
+        // pretty print data in system console
         df.print();
+        // Pretty Print Data Summary in System Console
+        // count, min, max, sum, mean ,median, standard deviation, 25%, 50%, 70%
+        df.describe()
+        // select certain rows and colums
+        DataFrame result = df.select().rows(new int[]{1,2,3,5,6,8,110,10000,99}).columns(new int[]{1,2,5}).get();
+        // save the final data as JSON format 
+        result.writeJson("output.json");
+        // save the final data as Microsoft Excel
+        result.writeXlsx("output.xlsx");
+        // save the final data as OpenDocument Spreadsheet
+        result.writeOds("output.ods");
+        // pretty print the last 3 rows
+        result.tail(3).print();
     }
 }
 ```
+---
+
+## 🆚 Simple Comparison
+
+| Library      | Mean | Std Dev | Notes             |
+| ------------ | ---- | ------- | ----------------- |
+| Fahmatrix    | ✓    | ✓       | Pure Java         |
+| Tablesaw     | ✓    | ✓       | More dependencies |
+| Apache Arrow | ✕    | ✕       | Requires setup    |
+| Pandas       | ✓    | ✓       | Python-only       |
 
 ---
 
@@ -59,18 +89,23 @@ You can find compiled Java Docs [over here](https://moustafa-nasr.github.io/Fahm
 
 ## ✨ Features
 
-- Load CSV files into DataFrame
+- Load CSV, JSON, Microsoft Excel,Open office ODS files into DataFrame
+- Save CSV, JSON, Microsoft Excel,Open office ODS files
 - Pretty-print data to console
 - View top rows with `head()` or bottom ones with `tail()`
+- Tranculate Data
 - Aggregations (count, min, max, sum, mean ,median, standard deviation, 25%, 50%, 70%, custom percentage)
 
 ### Coming Soon:
 
-- Filter rows and select columns
+- Filter data by arithmetic operations (gt, lt, eq, neq)
+- Filter data by Logic operations (and, or, not)
+- Filter data by String operations (contains, equal, equal ignore case)
 - GroupBy and pivot tables
-- Data export to Xlsx or JSON
-- Data import/export for Open office OBS, HTML, Xml, Parquet and more ..
+- Nested JSON Data
+- Data import/export for HTML, Xml, Parquet and more ..
 - Type inference and conversion
+- DSLInterpreter for SQL language lovers
 
 ---
 
