@@ -8,10 +8,12 @@ import java.util.stream.IntStream;
 
 import com.fahmatrix.Exporters.CsvExporter;
 import com.fahmatrix.Exporters.JsonExporter;
+import com.fahmatrix.Exporters.XlsxExporter;
 import com.fahmatrix.Helpers.DataSelector;
 import com.fahmatrix.Importers.CsvImporter;
 import com.fahmatrix.Importers.JsonImporter;
 import com.fahmatrix.Importers.SimpleXlsxImporter;
+
 
 /**
  * DataFrame is the basic object for hadling data
@@ -613,6 +615,23 @@ public class DataFrame {
             e.printStackTrace();
         }
         return this;
+    }
+
+    /**
+     * Exports data to a Microsoft Excel SpreadSheet xlsx file<br>
+     * The data is in the default sheet with name "sheet1"
+     * <br>
+     * 
+     * @param filePath full file path to save ex:
+     *                 ".\\examples\\exampleFiles\\small_data.xlsx"
+     */
+    public void writeXlsx(String filePath) {
+        try {
+            XlsxExporter xlsxExporter = new XlsxExporter(filePath);
+            xlsxExporter.saveXLSX(columns);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     /**
