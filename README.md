@@ -34,7 +34,7 @@ cd fahmatrix
 ./gradlew build
 ```
 
-or Test online
+### or Test online
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/moustafa-nasr/Fahmatrix/blob/main/FahmatrixExample.ipynb)
 
@@ -54,7 +54,7 @@ public class Main {
         df.print();
         // Pretty Print Data Summary in System Console
         // count, min, max, sum, mean ,median, standard deviation, 25%, 50%, 70%
-        df.describe()
+        df.describe();
         // select certain rows and colums
         DataFrame result = df.select().rows(new int[]{1,2,3,5,6,8,110,10000,99}).columns(new int[]{1,2,5}).get();
         // save the final data as JSON format 

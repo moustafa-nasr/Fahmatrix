@@ -1,16 +1,30 @@
 plugins {
     java
+    `maven-publish`
 }
 
 group = "com.fahmatrix" // Replace with your group
-version = "0.1.4"
+version = "0.1.5"
 
 java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+    withSourcesJar()  // ← Recommended
+    withJavadocJar()  // ← Recommended
 }
 
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            from(components["java"])
+            
+            groupId = "com.fahmatrix"
+            artifactId = "fahmatrix" // replace with your actual artifact name
+            version = "0.1.5"
+        }
+    }
+}
 
 repositories {
     mavenCentral()
