@@ -12,7 +12,7 @@ public class OdsImportExample {
     
     public static void main(String[] args) {
 
-        // simple excel file
+        // simple ODS file
         DataFrame ods1 = new DataFrame();
 		ods1.readOds(".\\examples\\exampleFiles\\small_data-google.ods");
 		ods1.print();

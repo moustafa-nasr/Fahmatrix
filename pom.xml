@@ -1,18 +1,50 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.fahmatrix</groupId>
   <artifactId>fahmatrix</artifactId>
-  <version>0.1.2</version>
+  <version>0.1.4-alpha</version>
+  <packaging>jar</packaging>
+  
   <name>Fahmatrix</name>
-  <description>Fahmatrix is a lightweight, modern Java library for working with tabular data, inspired by Python's Pandas and rooted in the idea of making data understanding (fahm) easy on the JVM. </description>
+  <description>Fahmatrix is a lightweight, modern Java library for working with tabular data, inspired by Python's Pandas and rooted in the idea of making data understanding (fahm) easy on the JVM.</description>
   <url>https://github.com/moustafa-nasr/fahmatrix</url>
+
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>moustafa-nasr</name>
+      <email>moustafa-nasr@users.noreply.github.com</email>
+      <organization>Fahmatrix</organization>
+      <organizationUrl>https://github.com/moustafa-nasr/Fahmatrix</organizationUrl>
+    </developer>
+  </developers>
+
+  <scm>
+    <connection>scm:git:git://github.com/moustafa-nasr/Fahmatrix.git</connection>
+    <developerConnection>scm:git:ssh://github.com:moustafa-nasr/Fahmatrix.git</developerConnection>
+    <url>http://github.com/moustafa-nasr/Fahmatrix/tree/master</url>
+  </scm>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
   <build>
     <sourceDirectory>src/main/java</sourceDirectory>
+    
     <plugins>
+      <!-- Compiler Plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -20,6 +52,67 @@
         <configuration>
           <source>17</source>
           <target>17</target>
+        </configuration>
+      </plugin>
+
+      <!-- Source Plugin (Required for Maven Central) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.3.0</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Javadoc Plugin (Required for Maven Central) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.6.0</version>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <doclint>none</doclint>
+        </configuration>
+      </plugin>
+
+      <!-- GPG Plugin (Required for Maven Central) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>3.1.0</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Central Publishing Plugin -->
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.7.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>central</publishingServerId>
+          <autoPublish>true</autoPublish>
         </configuration>
       </plugin>
     </plugins>
