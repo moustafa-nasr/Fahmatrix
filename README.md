@@ -27,10 +27,10 @@ Ideal for small projects, backend systems, or embedded environments like Android
 ### 📦 Using GitHub Releases
 
 Visit [Releases](https://github.com/moustafa-nasr/fahmatrix/releases) and download the latest JAR file.
+<br>
+Include it manually in your project’s classpath
 
-Include it manually in your project’s classpath or use Maven/Gradle if you're pulling from GitHub Packages (to be added in future versions).
-
-If you're building locally:
+### 🏠 If you're building locally:
 ```bash
 git clone https://github.com/moustafa-nasr/fahmatrix.git
 cd fahmatrix
@@ -76,7 +76,7 @@ dependencies {
 
 ```
 
-### 🛠️ Maven Using jitpack.io (Maven Central coming soon..)
+### 🛠️ Maven Using jitpack.io 
 
 Add to pom.xml
 
@@ -91,12 +91,12 @@ Add to pom.xml
   	<dependency>
 	    <groupId>com.github.moustafa-nasr</groupId>
 	    <artifactId>Fahmatrix</artifactId>
-	    <version>0.1.5</version>
+	    <version>v0.1.5</version>
 	</dependency>
 
 ```
 
-### 🛠️ Gradle Using jitpack.io (Maven Central coming soon..)
+### 🛠️ Gradle Using jitpack.io 
 
 For Java add to build.gradle
 
@@ -111,7 +111,7 @@ For Java add to build.gradle
 	}
 
     dependencies {
-	        implementation 'com.github.moustafa-nasr:Fahmatrix:0.1.5'
+	        implementation 'com.github.moustafa-nasr:Fahmatrix:v0.1.5'
 	}
 
 ```
@@ -129,7 +129,7 @@ For Kotlin add to build.gradle.kts
 	}
 
     dependencies {
-	        implementation("com.github.moustafa-nasr:Fahmatrix:0.1.5")
+	        implementation("com.github.moustafa-nasr:Fahmatrix:v0.1.5")
 	}
 
 ```
