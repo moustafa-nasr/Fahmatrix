@@ -5,7 +5,7 @@
 
   <groupId>com.fahmatrix</groupId>
   <artifactId>fahmatrix</artifactId>
-  <version>0.1.4-alpha</version>
+  <version>0.1.5</version>
   <packaging>jar</packaging>
   
   <name>Fahmatrix</name>

@@ -5,8 +5,8 @@ import com.fahmatrix.Series;
 public class HeadAndTail {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.4.jar" .\examples\HeadAndTail.java
-     * java -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" HeadAndTail
+     * javac -cp ".\build\libs\fahmatrix-0.1.5.jar" .\examples\HeadAndTail.java
+     * java -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" HeadAndTail
      *
      */
     

@@ -5,8 +5,8 @@ import com.fahmatrix.Series;
 public class XlsxImportExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.4.jar" .\examples\XlsxImportExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" XlsxImportExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.5.jar" .\examples\XlsxImportExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" XlsxImportExample
      *
      */
     

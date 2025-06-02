@@ -5,11 +5,11 @@ import com.fahmatrix.Series;
 public class CSVImportExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.4.jar" .\examples\CSVImportExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" CSVImportExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.5.jar" .\examples\CSVImportExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" CSVImportExample
      * 
      * for large datasets > 100K rows 
-     * java -Xms512M -Xmx1024M -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" CSVImportExample
+     * java -Xms512M -Xmx1024M -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" CSVImportExample
      */
     
     public static void main(String[] args) {

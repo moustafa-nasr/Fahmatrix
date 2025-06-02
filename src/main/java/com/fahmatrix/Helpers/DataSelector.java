@@ -77,7 +77,7 @@ public class DataSelector {
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param substring the substring to search for
+     * @param substring  the substring to search for
      * @return this
      */
     public DataSelector filterContains(String columnName, String substring) {
@@ -86,11 +86,12 @@ public class DataSelector {
     }
 
     /**
-     * Filter rows where the specified column equals the given value (case-sensitive)
+     * Filter rows where the specified column equals the given value
+     * (case-sensitive)
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param value the value to match exactly
+     * @param value      the value to match exactly
      * @return this
      */
     public DataSelector filterEquals(String columnName, String value) {
@@ -99,11 +100,12 @@ public class DataSelector {
     }
 
     /**
-     * Filter rows where the specified column equals the given value (case-insensitive)
+     * Filter rows where the specified column equals the given value
+     * (case-insensitive)
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param value the value to match (ignoring case)
+     * @param value      the value to match (ignoring case)
      * @return this
      */
     public DataSelector filterEqualsIgnoreCase(String columnName, String value) {
@@ -116,7 +118,8 @@ public class DataSelector {
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param predicate a function that takes a string and returns true if the row should be included
+     * @param predicate  a function that takes a string and returns true if the row
+     *                   should be included
      * @return this
      */
     public DataSelector filterByStringPredicate(String columnName, Predicate<String> predicate) {
@@ -129,7 +132,7 @@ public class DataSelector {
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param prefix the prefix to match
+     * @param prefix     the prefix to match
      * @return this
      */
     public DataSelector filterStartsWith(String columnName, String prefix) {
@@ -141,7 +144,7 @@ public class DataSelector {
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param suffix the suffix to match
+     * @param suffix     the suffix to match
      * @return this
      */
     public DataSelector filterEndsWith(String columnName, String suffix) {
@@ -153,7 +156,7 @@ public class DataSelector {
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @param regex the regular expression pattern to match
+     * @param regex      the regular expression pattern to match
      * @return this
      */
     public DataSelector filterRegex(String columnName, String regex) {
@@ -181,7 +184,7 @@ public class DataSelector {
      */
     public DataFrame get() {
         DataFrame dataToSelect = this.filteredData; // Use filtered data if any filters were applied
-        
+
         if (rowLabels != null || colLabels != null) {
             return dataToSelect.getByLabels(
                     rowLabels != null ? rowLabels : new String[0],
@@ -205,7 +208,7 @@ public class DataSelector {
      */
     public Object getValue() {
         DataFrame dataToSelect = this.filteredData; // Use filtered data if any filters were applied
-        
+
         if (rowLabels != null && colLabels != null && rowLabels.length == 1 && colLabels.length == 1) {
             return dataToSelect.getByLabel(rowLabels[0], colLabels[0]);
         } else if (rowIndices != null && colIndices != null && rowIndices.length == 1 && colIndices.length == 1) {

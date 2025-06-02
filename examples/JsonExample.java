@@ -5,11 +5,11 @@ import com.fahmatrix.Series;
 public class JsonExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.4.jar" .\examples\JsonExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" JsonExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.5.jar" .\examples\JsonExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" JsonExample
      * 
      * for large datasets > 100K rows 
-     * java -Xms512M -Xmx1024M -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" JsonExample
+     * java -Xms512M -Xmx1024M -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" JsonExample
      */
     
     public static void main(String[] args) {

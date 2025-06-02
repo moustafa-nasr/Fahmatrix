@@ -29,6 +29,7 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Export To CSV/TSV, xlsx, Ods, JSON <br>
  * Reverse (transpose) data <br>
  * Select Row/Column by Label or Position <br>
+ * Filter By String Opertions (contains,  equal, equal ignore case, start with , end with, regex , not empty, custom String Predicate)
  */
 public class DataFrame {
 
@@ -382,7 +383,7 @@ public class DataFrame {
      * 
      * @param columnName the name of the column to filter
      * @param substring  the substring to search for
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterContains(String columnName, String substring) {
         if (!columns.containsKey(columnName)) {
@@ -424,7 +425,7 @@ public class DataFrame {
      * 
      * @param columnName the name of the column to filter
      * @param value      the value to match exactly
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterEquals(String columnName, String value) {
         if (!columns.containsKey(columnName)) {
@@ -474,7 +475,7 @@ public class DataFrame {
      * 
      * @param columnName the name of the column to filter
      * @param value      the value to match (ignoring case)
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterEqualsIgnoreCase(String columnName, String value) {
         if (!columns.containsKey(columnName)) {
@@ -525,7 +526,7 @@ public class DataFrame {
      * @param columnName the name of the column to filter
      * @param predicate  a function that takes a string and returns true if the row
      *                   should be included
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterByStringPredicate(String columnName, java.util.function.Predicate<String> predicate) {
         if (!columns.containsKey(columnName)) {
@@ -567,7 +568,7 @@ public class DataFrame {
      * 
      * @param columnName the name of the column to filter
      * @param prefix     the prefix to match
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterStartsWith(String columnName, String prefix) {
         return filterByStringPredicate(columnName, s -> s.startsWith(prefix));
@@ -579,7 +580,7 @@ public class DataFrame {
      * 
      * @param columnName the name of the column to filter
      * @param suffix     the suffix to match
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterEndsWith(String columnName, String suffix) {
         return filterByStringPredicate(columnName, s -> s.endsWith(suffix));
@@ -591,7 +592,7 @@ public class DataFrame {
      * 
      * @param columnName the name of the column to filter
      * @param regex      the regular expression pattern to match
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterRegex(String columnName, String regex) {
         return filterByStringPredicate(columnName, s -> s.matches(regex));
@@ -602,7 +603,7 @@ public class DataFrame {
      * <br>
      * 
      * @param columnName the name of the column to filter
-     * @return a new DataFrame with filtered rows
+     * @return New Dataframe with only the selected data
      */
     public DataFrame filterNotEmpty(String columnName) {
         return filterByStringPredicate(columnName, s -> s != null && !s.trim().isEmpty());
@@ -629,7 +630,7 @@ public class DataFrame {
      * <br>
      */
     public void print() {
-        if (columns == null || index==null ||  columns.isEmpty() || index.isEmpty()) {
+        if (columns == null || index == null || columns.isEmpty() || index.isEmpty()) {
             System.out.println("Empty DataFrame");
             return;
         }

@@ -5,8 +5,8 @@ import com.fahmatrix.Series;
 public class OdsExportExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.4.jar" .\examples\OdsExportExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.4.jar;examples" OdsExportExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.5.jar" .\examples\OdsExportExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" OdsExportExample
      *
      */
     

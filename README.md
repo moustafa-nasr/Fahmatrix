@@ -1,6 +1,6 @@
-# Fahmatrix [![Version](https://img.shields.io/badge/version-0.1.4-yellow)](https://github.com/moustafa-nasr/fahmatrix/releases)
+# Fahmatrix [![Version](https://img.shields.io/badge/version-0.1.5-yellow)](https://github.com/moustafa-nasr/fahmatrix/releases)
 [![Docs](https://img.shields.io/badge/Javadoc-online-blue)](https://moustafa-nasr.github.io/Fahmatrix/)  [![Java](https://img.shields.io/badge/Java-17+-brightgreen?logo=java)](https://openjdk.org/) [![Platform](https://img.shields.io/badge/Platform-JVM-lightgrey)]() [![License](https://img.shields.io/github/license/moustafa-nasr/fahmatrix)](https://github.com/moustafa-nasr/fahmatrix/blob/main/LICENSE)
-[![](https://jitpack.io/v/moustafa-nasr/Fahmatrix.svg)](https://jitpack.io/#moustafa-nasr/Fahmatrix/1f5e2faf6d)
+[![](https://jitpack.io/v/moustafa-nasr/Fahmatrix.svg)](https://jitpack.io/#moustafa-nasr/Fahmatrix/)
 
 [![Star](https://img.shields.io/github/stars/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/stargazers) [![Fork](https://img.shields.io/github/forks/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/forks) [![Watch](https://img.shields.io/github/watchers/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/watchers)
 
@@ -15,7 +15,9 @@ Ideal for small projects, backend systems, or embedded environments like Android
 📄 Easy CSV, Xlsx, Ods, Json reading and previewing  
 📄 Easy CSV, Xlsx, Ods, Json writing  
 🔍 Row filtering and column selection  
-📊 Aggregations, grouping, and sorting (coming soon)  
+🔍 Column filtering by string operations (contains, equals, etc..)
+📊 Aggregations (mean , average , etc.. )
+📊 Grouping, and sorting (coming soon)  
 🧩 No external dependencies (for now)
 
 ---
@@ -40,6 +42,40 @@ cd fahmatrix
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/moustafa-nasr/Fahmatrix/blob/main/FahmatrixExample.ipynb)
 
 
+### 🛠️ Maven
+
+Add to pom.xml
+
+```xml
+<dependency>
+  <groupId>com.fahmatrix</groupId>
+  <artifactId>fahmatrix</artifactId>
+  <version>0.1.5</version>
+</dependency>
+```
+
+### 🛠️ Gradle (kotlin)
+
+Add to build.gradle.kts
+
+```kotlin
+dependencies {
+  implementation("com.fahmatrix:fahmatrix:0.1.5")
+}
+
+```
+
+### 🛠️ Gradle (java)
+
+Add to build.gradle
+
+```java
+dependencies {
+  implementation 'com.fahmatrix:fahmatrix:0.1.5'
+}
+
+```
+
 ### 🛠️ Maven Using jitpack.io (Maven Central coming soon..)
 
 Add to pom.xml
@@ -55,14 +91,14 @@ Add to pom.xml
   	<dependency>
 	    <groupId>com.github.moustafa-nasr</groupId>
 	    <artifactId>Fahmatrix</artifactId>
-	    <version>1f5e2faf6d</version>
+	    <version>0.1.5</version>
 	</dependency>
 
 ```
 
 ### 🛠️ Gradle Using jitpack.io (Maven Central coming soon..)
 
-For Java add to settings.gradle
+For Java add to build.gradle
 
 ```java
 
@@ -75,12 +111,12 @@ For Java add to settings.gradle
 	}
 
     dependencies {
-	        implementation 'com.github.moustafa-nasr:Fahmatrix:1f5e2faf6d'
+	        implementation 'com.github.moustafa-nasr:Fahmatrix:0.1.5'
 	}
 
 ```
 
-For Kotlin add to settings.gradle.kts
+For Kotlin add to build.gradle.kts
 
 ```kotlin
 
@@ -93,7 +129,7 @@ For Kotlin add to settings.gradle.kts
 	}
 
     dependencies {
-	        implementation("com.github.moustafa-nasr:Fahmatrix:1f5e2faf6d")
+	        implementation("com.github.moustafa-nasr:Fahmatrix:0.1.5")
 	}
 
 ```
@@ -116,7 +152,7 @@ public class Main {
         // count, min, max, sum, mean ,median, standard deviation, 25%, 50%, 70%
         df.describe();
         // select certain rows and colums
-        DataFrame result = df.select().rows(new int[]{1,2,3,5,6,8,110,10000,99}).columns(new int[]{1,2,5}).get();
+        DataFrame result = df.select().rows(new int[]{1,2,3,5,6,8,110,10000,99}).columns(new String[]{"name","company","city"}).get();
         // save the final data as JSON format 
         result.writeJson("output.json");
         // save the final data as Microsoft Excel
@@ -132,15 +168,14 @@ public class Main {
 
 ## 🆚 Simple Comparison
 
-| Library      | Mean | Std Dev | Notes             |
-| ------------ | ---- | ------- | ----------------- |
-| Fahmatrix    | ✓    | ✓       | Pure Java         |
-| Tablesaw     | ✓    | ✓       | More dependencies |
-| Apache Arrow | ✕    | ✕       | Requires setup    |
-| Pandas       | ✓    | ✓       | Python-only       |
+| Library      | Read Files | Aggregations | Notes             |
+| ------------ | ---------- | ------------ | ----------------- |
+| Fahmatrix    | ✓  	    | ✓           | Pure Java         |
+| Tablesaw     | ✓  	    | ✓           | More dependencies |
+| Apache Arrow | ✓  	    | ✕           | Requires setup    |
+| Pandas       | ✓  	    | ✓           | Python-only       |
 
 ---
-
 ## 📜 Docs
 
 You can find compiled Java Docs [over here](https://moustafa-nasr.github.io/Fahmatrix/)
@@ -155,12 +190,12 @@ You can find compiled Java Docs [over here](https://moustafa-nasr.github.io/Fahm
 - View top rows with `head()` or bottom ones with `tail()`
 - Tranculate Data
 - Aggregations (count, min, max, sum, mean ,median, standard deviation, 25%, 50%, 70%, custom percentage)
+- Filter data by String operations (contains,  equal, equal ignore case, start with , end with, regex , not empty, custom String Predicate)
 
 ### Coming Soon:
 
 - Filter data by arithmetic operations (gt, lt, eq, neq)
 - Filter data by Logic operations (and, or, not)
-- Filter data by String operations (contains, equal, equal ignore case)
 - GroupBy and pivot tables
 - Nested JSON Data
 - Data import/export for HTML, Xml, Parquet and more ..
