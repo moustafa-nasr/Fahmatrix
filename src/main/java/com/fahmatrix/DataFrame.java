@@ -1,6 +1,7 @@
 package com.fahmatrix;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,6 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Select Row/Column by Label or Position <br>
  */
 public class DataFrame {
-
 
     private Map<String, List<Object>> columns;
     private List<String> index;
@@ -272,22 +272,33 @@ public class DataFrame {
         Map<String, List<Object>> newColumns = new LinkedHashMap<>();
 
         // Filter rows
+        Map<String, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i < index.size(); i++) {
+            indexMap.put(index.get(i), i);
+        }
+
         List<Integer> rowIndices = new ArrayList<>();
-        for (String label : rowLabels) {
-            int idx = index.indexOf(label);
-            if (idx != -1)
+        String[] labelsToProcess = rowLabels.length > 0 ? rowLabels : index.toArray(new String[0]);
+
+        for (String label : labelsToProcess) {
+            Integer idx = indexMap.get(label);
+            if (idx != null) {
                 rowIndices.add(idx);
+            }
         }
 
         // Filter columns
         for (String col : colLabels) {
             if (columns.containsKey(col)) {
                 List<Object> newColumn = new ArrayList<>();
+                List<Object> currentColumn = columns.get(col);
                 for (int rowIdx : rowIndices) {
-                    newColumn.add(columns.get(col).get(rowIdx));
+                    // if(currentColumn.indexOf(rowIdx) != -1) check if the column has that element
+                    newColumn.add(currentColumn.get(rowIdx));
                 }
                 newColumns.put(col, newColumn);
             }
+
         }
 
         // Create new index
@@ -367,6 +378,237 @@ public class DataFrame {
     }
 
     /**
+     * Filters rows where the specified column contains the given substring
+     * 
+     * @param columnName the name of the column to filter
+     * @param substring  the substring to search for
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterContains(String columnName, String substring) {
+        if (!columns.containsKey(columnName)) {
+            throw new IllegalArgumentException("Column '" + columnName + "' does not exist");
+        }
+
+        List<Object> columnData = columns.get(columnName);
+        Map<String, List<Object>> filteredColumns = new HashMap<>();
+        List<String> filteredIndex = new ArrayList<>();
+
+        // Initialize filtered columns
+        for (String col : columns.keySet()) {
+            filteredColumns.put(col, new ArrayList<>());
+        }
+
+        // Filter rows
+        for (int i = 0; i < columnData.size(); i++) {
+            Object value = columnData.get(i);
+            if (value != null && value.toString().contains(substring)) {
+                // Add this row to filtered result
+                for (String col : columns.keySet()) {
+                    filteredColumns.get(col).add(columns.get(col).get(i));
+                }
+                if (index != null && i < index.size()) {
+                    filteredIndex.add(index.get(i));
+                }
+            }
+        }
+
+        DataFrame result = new DataFrame();
+        result.columns = filteredColumns;
+        result.index = filteredIndex.isEmpty() ? null : filteredIndex;
+        return result;
+    }
+
+    /**
+     * Filters rows where the specified column equals the given value
+     * (case-sensitive)
+     * 
+     * @param columnName the name of the column to filter
+     * @param value      the value to match exactly
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterEquals(String columnName, String value) {
+        if (!columns.containsKey(columnName)) {
+            throw new IllegalArgumentException("Column '" + columnName + "' does not exist");
+        }
+
+        List<Object> columnData = columns.get(columnName);
+        Map<String, List<Object>> filteredColumns = new HashMap<>();
+        List<String> filteredIndex = new ArrayList<>();
+
+        // Initialize filtered columns
+        for (String col : columns.keySet()) {
+            filteredColumns.put(col, new ArrayList<>());
+        }
+
+        // Filter rows
+        for (int i = 0; i < columnData.size(); i++) {
+            Object cellValue = columnData.get(i);
+            boolean matches = false;
+
+            if (value == null && cellValue == null) {
+                matches = true;
+            } else if (value != null && cellValue != null) {
+                matches = value.equals(cellValue.toString());
+            }
+
+            if (matches) {
+                // Add this row to filtered result
+                for (String col : columns.keySet()) {
+                    filteredColumns.get(col).add(columns.get(col).get(i));
+                }
+                if (index != null && i < index.size()) {
+                    filteredIndex.add(index.get(i));
+                }
+            }
+        }
+
+        DataFrame result = new DataFrame();
+        result.columns = filteredColumns;
+        result.index = filteredIndex.isEmpty() ? null : filteredIndex;
+        return result;
+    }
+
+    /**
+     * Filters rows where the specified column equals the given value
+     * (case-insensitive)
+     * 
+     * @param columnName the name of the column to filter
+     * @param value      the value to match (ignoring case)
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterEqualsIgnoreCase(String columnName, String value) {
+        if (!columns.containsKey(columnName)) {
+            throw new IllegalArgumentException("Column '" + columnName + "' does not exist");
+        }
+
+        List<Object> columnData = columns.get(columnName);
+        Map<String, List<Object>> filteredColumns = new HashMap<>();
+        List<String> filteredIndex = new ArrayList<>();
+
+        // Initialize filtered columns
+        for (String col : columns.keySet()) {
+            filteredColumns.put(col, new ArrayList<>());
+        }
+
+        // Filter rows
+        for (int i = 0; i < columnData.size(); i++) {
+            Object cellValue = columnData.get(i);
+            boolean matches = false;
+
+            if (value == null && cellValue == null) {
+                matches = true;
+            } else if (value != null && cellValue != null) {
+                matches = value.equalsIgnoreCase(cellValue.toString());
+            }
+
+            if (matches) {
+                // Add this row to filtered result
+                for (String col : columns.keySet()) {
+                    filteredColumns.get(col).add(columns.get(col).get(i));
+                }
+                if (index != null && i < index.size()) {
+                    filteredIndex.add(index.get(i));
+                }
+            }
+        }
+
+        DataFrame result = new DataFrame();
+        result.columns = filteredColumns;
+        result.index = filteredIndex.isEmpty() ? null : filteredIndex;
+        return result;
+    }
+
+    // Additional helper method for more flexible string filtering
+    /**
+     * Filters rows based on a custom string predicate
+     * 
+     * @param columnName the name of the column to filter
+     * @param predicate  a function that takes a string and returns true if the row
+     *                   should be included
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterByStringPredicate(String columnName, java.util.function.Predicate<String> predicate) {
+        if (!columns.containsKey(columnName)) {
+            throw new IllegalArgumentException("Column '" + columnName + "' does not exist");
+        }
+
+        List<Object> columnData = columns.get(columnName);
+        Map<String, List<Object>> filteredColumns = new HashMap<>();
+        List<String> filteredIndex = new ArrayList<>();
+
+        // Initialize filtered columns
+        for (String col : columns.keySet()) {
+            filteredColumns.put(col, new ArrayList<>());
+        }
+
+        // Filter rows
+        for (int i = 0; i < columnData.size(); i++) {
+            Object value = columnData.get(i);
+            if (value != null && predicate.test(value.toString())) {
+                // Add this row to filtered result
+                for (String col : columns.keySet()) {
+                    filteredColumns.get(col).add(columns.get(col).get(i));
+                }
+                if (index != null && i < index.size()) {
+                    filteredIndex.add(index.get(i));
+                }
+            }
+        }
+
+        DataFrame result = new DataFrame();
+        result.columns = filteredColumns;
+        result.index = filteredIndex.isEmpty() ? null : filteredIndex;
+        return result;
+    }
+
+    /**
+     * Filter rows where the specified column starts with the given prefix
+     * <br>
+     * 
+     * @param columnName the name of the column to filter
+     * @param prefix     the prefix to match
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterStartsWith(String columnName, String prefix) {
+        return filterByStringPredicate(columnName, s -> s.startsWith(prefix));
+    }
+
+    /**
+     * Filter rows where the specified column ends with the given suffix
+     * <br>
+     * 
+     * @param columnName the name of the column to filter
+     * @param suffix     the suffix to match
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterEndsWith(String columnName, String suffix) {
+        return filterByStringPredicate(columnName, s -> s.endsWith(suffix));
+    }
+
+    /**
+     * Filter rows where the specified column matches the given regex pattern
+     * <br>
+     * 
+     * @param columnName the name of the column to filter
+     * @param regex      the regular expression pattern to match
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterRegex(String columnName, String regex) {
+        return filterByStringPredicate(columnName, s -> s.matches(regex));
+    }
+
+    /**
+     * Filter rows where the specified column is not null and not empty
+     * <br>
+     * 
+     * @param columnName the name of the column to filter
+     * @return a new DataFrame with filtered rows
+     */
+    public DataFrame filterNotEmpty(String columnName) {
+        return filterByStringPredicate(columnName, s -> s != null && !s.trim().isEmpty());
+    }
+
+    /**
      * Select using builder pattern
      * <br>
      * use like that example <br>
@@ -387,7 +629,7 @@ public class DataFrame {
      * <br>
      */
     public void print() {
-        if (columns.isEmpty() || index.isEmpty()) {
+        if (columns == null || index==null ||  columns.isEmpty() || index.isEmpty()) {
             System.out.println("Empty DataFrame");
             return;
         }
