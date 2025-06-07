@@ -15,6 +15,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.fahmatrix.Helpers.FileHelpers;
+
 public class OdsExporter {
     private String filePath;
     private Map<String, List<Object>> columns;
@@ -155,8 +157,7 @@ public class OdsExporter {
     private void writeContent(ZipOutputStream zos) throws Exception {
         zos.putNextEntry(new ZipEntry("content.xml"));
 
-        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.newDocument();
+        Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
 
         // Root element
         Element documentContent = doc.createElement("office:document-content");

@@ -4,10 +4,14 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import com.fahmatrix.Helpers.FileHelpers;
 
 public class SimpleOdsImporter {
 
@@ -81,7 +85,7 @@ public class SimpleOdsImporter {
             }
 
             try (InputStream stream = zip.getInputStream(contentEntry)) {
-                Document contentDoc = parseXml(stream);
+                Document contentDoc = FileHelpers.parseXml(stream);
 
                 // Find the first table (sheet)
                 NodeList tableNodes = contentDoc.getElementsByTagName("table:table");
@@ -145,19 +149,6 @@ public class SimpleOdsImporter {
             }
         }
         return columnData;
-    }
-
-    /**
-     * Helper method used to parse xml files
-     * <br>
-     * 
-     * @param stream Input stream for xml file inside archive
-     * @return parsed xml document
-     * @throws Exception
-     */
-    private Document parseXml(InputStream stream) throws Exception {
-        return DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder().parse(stream);
     }
 
     /**

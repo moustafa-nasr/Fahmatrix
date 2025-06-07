@@ -15,6 +15,8 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import com.fahmatrix.Helpers.FileHelpers;
+
 public class XlsxExporter {
     private String filePath;
 
@@ -151,8 +153,7 @@ public class XlsxExporter {
     private void writeSharedStrings(ZipOutputStream zos) throws Exception {
         zos.putNextEntry(new ZipEntry("xl/sharedStrings.xml"));
 
-        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.newDocument();
+        Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
 
         Element sst = doc.createElement("sst");
         sst.setAttribute("xmlns", "http://schemas.openxmlformats.org/spreadsheetml/2006/main");
@@ -213,8 +214,7 @@ public class XlsxExporter {
     private void writeSheet(ZipOutputStream zos) throws Exception {
         zos.putNextEntry(new ZipEntry("xl/worksheets/sheet1.xml"));
 
-        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.newDocument();
+        Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
 
         Element worksheet = doc.createElement("worksheet");
         worksheet.setAttribute("xmlns", "http://schemas.openxmlformats.org/spreadsheetml/2006/main");

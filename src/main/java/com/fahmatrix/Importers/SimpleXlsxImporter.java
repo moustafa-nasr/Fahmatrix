@@ -4,10 +4,14 @@ import java.io.InputStream;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import com.fahmatrix.Helpers.FileHelpers;
 
 public class SimpleXlsxImporter {
 
@@ -69,7 +73,7 @@ public class SimpleXlsxImporter {
             ZipEntry sharedStringsEntry = zip.getEntry("xl/sharedStrings.xml");
             if (sharedStringsEntry != null) {
                 try (InputStream stream = zip.getInputStream(sharedStringsEntry)) {
-                    Document sharedStringsDoc = parseXml(stream);
+                    Document sharedStringsDoc = FileHelpers.parseXml(stream);
                     NodeList siNodes = sharedStringsDoc.getElementsByTagName("si");
                     for (int i = 0; i < siNodes.getLength(); i++) {
                         sharedStrings.add(siNodes.item(i).getTextContent().trim());
@@ -80,7 +84,7 @@ public class SimpleXlsxImporter {
             // Parse first sheet
             ZipEntry sheetEntry = zip.getEntry("xl/worksheets/sheet1.xml");
             try (InputStream stream = zip.getInputStream(sheetEntry)) {
-                Document sheetDoc = parseXml(stream);
+                Document sheetDoc = FileHelpers.parseXml(stream);
                 NodeList rowNodes = sheetDoc.getElementsByTagName("row");
 
                 // Initialize column structure
@@ -112,21 +116,6 @@ public class SimpleXlsxImporter {
             }
         }
         return columnData;
-    }
-
-    /**
-     * Helper method used to parse xml files, used in all parsing proccess as xlsx
-     * files are achives containing data in xml formats
-     * <br>
-     * 
-     * @param stream Input stream for xml file inside archive. Used to get excel
-     *               file configurations and style
-     * @return parsed xml document
-     * @throws Exception
-     */
-    private Document parseXml(InputStream stream) throws Exception {
-        return DocumentBuilderFactory.newInstance()
-                .newDocumentBuilder().parse(stream);
     }
 
     /**
