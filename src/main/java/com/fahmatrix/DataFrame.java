@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.fahmatrix.Exporters.CsvExporter;
@@ -53,7 +54,7 @@ public class DataFrame {
      */
     public DataFrame(List<String> index) {
         this.columns = new LinkedHashMap<>();
-        this.index = index;
+        this.index = new ArrayList<>(index);
     }
 
     /**
@@ -69,8 +70,12 @@ public class DataFrame {
         // throw new IllegalArgumentException("Values and index must be same length
         // "+index.size()+" != "+columns.size());
         // }
-        this.columns = columns;
-        this.index = index;
+        this.columns = columns.entrySet().stream()
+        .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            entry -> new ArrayList<>(entry.getValue())
+        ));
+        this.index = new ArrayList<>(index);
     }
 
     /**
@@ -84,9 +89,9 @@ public class DataFrame {
         columns.put(name, new ArrayList<>(data));
         // Automatically generate index if empty
         if (index.isEmpty()) {
-            for (int i = 0; i < data.size(); i++) {
-                index.add(String.valueOf(i));
-            }
+            index.addAll(IntStream.range(0, data.size())
+                .mapToObj(String::valueOf)
+                .collect(Collectors.toList()));
         }
     }
 

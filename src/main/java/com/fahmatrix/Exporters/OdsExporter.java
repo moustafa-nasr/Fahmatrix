@@ -3,6 +3,7 @@ package com.fahmatrix.Exporters;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.DocumentBuilder;
@@ -34,7 +35,11 @@ public class OdsExporter {
     }
 
     public void saveODS(Map<String, List<Object>> columns) throws Exception {
-        this.columns = columns;
+        this.columns = columns.entrySet().stream()
+        .collect(Collectors.toMap(
+            Map.Entry::getKey,
+            entry -> new ArrayList<>(entry.getValue())
+        ));
 
         try (FileOutputStream fos = new FileOutputStream(filePath);
                 ZipOutputStream zos = new ZipOutputStream(fos)) {
