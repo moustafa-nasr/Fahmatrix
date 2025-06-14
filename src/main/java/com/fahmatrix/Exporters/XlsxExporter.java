@@ -8,8 +8,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -88,7 +90,7 @@ public class XlsxExporter {
         }
     }
 
-    private void writeContentTypes(ZipOutputStream zos) throws Exception {
+    private void writeContentTypes(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("[Content_Types].xml"));
 
         String contentTypes = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
@@ -110,7 +112,7 @@ public class XlsxExporter {
         zos.closeEntry();
     }
 
-    private void writeRels(ZipOutputStream zos) throws Exception {
+    private void writeRels(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("_rels/.rels"));
 
         String rels = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
@@ -123,7 +125,7 @@ public class XlsxExporter {
         zos.closeEntry();
     }
 
-    private void writeWorkbook(ZipOutputStream zos) throws Exception {
+    private void writeWorkbook(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("xl/workbook.xml"));
 
         String workbook = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
@@ -138,7 +140,7 @@ public class XlsxExporter {
         zos.closeEntry();
     }
 
-    private void writeWorkbookRels(ZipOutputStream zos) throws Exception {
+    private void writeWorkbookRels(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("xl/_rels/workbook.xml.rels"));
 
         String workbookRels = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
@@ -155,7 +157,7 @@ public class XlsxExporter {
         zos.closeEntry();
     }
 
-    private void writeSharedStrings(ZipOutputStream zos) throws Exception {
+    private void writeSharedStrings(ZipOutputStream zos) throws IOException,ParserConfigurationException,TransformerException {
         zos.putNextEntry(new ZipEntry("xl/sharedStrings.xml"));
 
         Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
@@ -178,7 +180,7 @@ public class XlsxExporter {
         zos.closeEntry();
     }
 
-    private void writeStyles(ZipOutputStream zos) throws Exception {
+    private void writeStyles(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("xl/styles.xml"));
 
         String styles = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n" +
@@ -216,7 +218,7 @@ public class XlsxExporter {
         zos.closeEntry();
     }
 
-    private void writeSheet(ZipOutputStream zos) throws Exception {
+    private void writeSheet(ZipOutputStream zos) throws IOException,ParserConfigurationException,TransformerException {
         zos.putNextEntry(new ZipEntry("xl/worksheets/sheet1.xml"));
 
         Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
@@ -301,7 +303,7 @@ public class XlsxExporter {
         return colRef.toString() + (row + 1);
     }
 
-    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws Exception {
+    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException  {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");

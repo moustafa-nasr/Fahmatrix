@@ -8,8 +8,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
@@ -54,7 +56,7 @@ public class OdsExporter {
         }
     }
 
-    private void writeMimeType(ZipOutputStream zos) throws Exception {
+    private void writeMimeType(ZipOutputStream zos) throws IOException {
         // First entry must be mimetype (uncompressed)
         ZipEntry entry = new ZipEntry("mimetype");
         entry.setMethod(ZipEntry.STORED);
@@ -73,7 +75,7 @@ public class OdsExporter {
         return crc.getValue();
     }
 
-    private void writeManifest(ZipOutputStream zos) throws Exception {
+    private void writeManifest(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("META-INF/manifest.xml"));
 
         String manifest = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -91,7 +93,7 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeMeta(ZipOutputStream zos) throws Exception {
+    private void writeMeta(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("meta.xml"));
 
         String meta = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -108,7 +110,7 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeSettings(ZipOutputStream zos) throws Exception {
+    private void writeSettings(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("settings.xml"));
 
         String settings = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -128,7 +130,7 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeStyles(ZipOutputStream zos) throws Exception {
+    private void writeStyles(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("styles.xml"));
 
         String styles = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -159,7 +161,7 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeContent(ZipOutputStream zos) throws Exception {
+    private void writeContent(ZipOutputStream zos) throws IOException,ParserConfigurationException,TransformerException {
         zos.putNextEntry(new ZipEntry("content.xml"));
 
         Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
@@ -242,7 +244,7 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws Exception {
+    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException  {
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");

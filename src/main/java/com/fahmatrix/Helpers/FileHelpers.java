@@ -1,11 +1,14 @@
 package com.fahmatrix.Helpers;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 public class FileHelpers {
 
@@ -14,9 +17,9 @@ public class FileHelpers {
      * <br>
      * 
      * @return
-     * @throws Exception
+     * @throws ParserConfigurationException for XML document builder configuration issues
      */
-    public static DocumentBuilderFactory createSecureDocumentBuilderFactory() throws Exception {
+    public static DocumentBuilderFactory createSecureDocumentBuilderFactory() throws ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
         // Prevent XXE attacks
@@ -38,9 +41,11 @@ public class FileHelpers {
      *               spreadsheets (excel/ODS)
      *               file configurations and style
      * @return parsed xml document
-     * @throws Exception
+     * @throws ParserConfigurationException for XML document builder configuration issues
+     * @throws SAXException for XML parsing errors
+     * @throws IOException for file and stream operations
      */
-    public static Document parseXml(InputStream stream) throws Exception {
+    public static Document parseXml(InputStream stream) throws ParserConfigurationException,SAXException,IOException {
         DocumentBuilder builder = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder();
         return builder.parse(stream);
     }
