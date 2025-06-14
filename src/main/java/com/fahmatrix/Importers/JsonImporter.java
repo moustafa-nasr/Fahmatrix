@@ -17,9 +17,27 @@ public class JsonImporter {
             try {
                 readJSONInMemory(filePath);
             } catch (OutOfMemoryError e) {
-                columns.clear();
-                index.clear();
-                System.gc();
+                // If we run out of memory, clear and switch to streaming
+                
+                if (columns != null) {
+                    columns.clear();
+                    columns = null;
+                }
+                if (index != null) {
+                    index.clear();
+                    index = null;
+                }
+                
+                // Give JVM a moment to clean up naturally
+                try {
+                    Thread.sleep(100); // Brief pause to allow natural GC
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                columns = new HashMap<>();
+                index = new ArrayList<>();
+
                 readJSONStreaming(filePath);
             }
         } else {

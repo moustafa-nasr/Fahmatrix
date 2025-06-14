@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,9 +52,27 @@ public class CsvImporter {
                 readCSVInMemory(filePath); // Fast but uses more memory
             } catch (OutOfMemoryError e) {
                 // If we run out of memory, clear and switch to streaming
-                columns.clear();
-                index.clear();
-                System.gc();
+                
+                if (columns != null) {
+                    columns.clear();
+                    columns = null;
+                }
+                if (index != null) {
+                    index.clear();
+                    index = null;
+                }
+                
+                // Give JVM a moment to clean up naturally
+                try {
+                    Thread.sleep(100); // Brief pause to allow natural GC
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
+
+                columns = new HashMap<>();
+                index = new ArrayList<>();
+    
+    
                 readCSVStreaming(filePath);
             }
         } else {
