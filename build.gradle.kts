@@ -1,10 +1,21 @@
 plugins {
     java
     `maven-publish`
+    id("org.sonarqube") version "6.2.0.5505"
 }
 
 group = "com.fahmatrix" // Replace with your group
 version = "0.1.5"
+
+sonar {
+  properties {
+    property("sonar.projectKey", "com:fahmatrix")
+    property("sonar.projectName", "Fahmatrix")
+    property("sonar.host.url", "http://localhost:9000")
+    property("sonar.token", System.getenv("SONAR_TOKEN_FAHMATRIX"))
+  }
+}
+
 
 java {
     toolchain {
