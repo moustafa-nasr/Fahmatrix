@@ -510,7 +510,7 @@ public class DataFrame {
             if (matches) {
                 // Add this row to filtered result
                 for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
-                    filteredColumns.get(col).add(columns.get(col).get(i));
+                    filteredColumns.get(col.getKey()).add(col.getValue().get(i));
                 }
                 if (index != null && i < index.size()) {
                     filteredIndex.add(index.get(i));
@@ -553,7 +553,7 @@ public class DataFrame {
             if (value != null && predicate.test(value.toString())) {
                 // Add this row to filtered result
                 for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
-                    filteredColumns.get(col).add(columns.get(col).get(i));
+                    filteredColumns.get(col.getKey()).add(col.getValue().get(i));
                 }
                 if (index != null && i < index.size()) {
                     filteredIndex.add(index.get(i));
