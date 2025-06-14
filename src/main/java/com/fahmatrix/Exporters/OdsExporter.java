@@ -245,7 +245,7 @@ public class OdsExporter {
     }
 
     private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException  {
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        TransformerFactory transformerFactory = FileHelpers.createSecureTransformerFactory();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
