@@ -400,8 +400,8 @@ public class DataFrame {
         List<String> filteredIndex = new ArrayList<>();
 
         // Initialize filtered columns
-        for (String col : columns.keySet()) {
-            filteredColumns.put(col, new ArrayList<>());
+        for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
+            filteredColumns.put(col.getKey(), new ArrayList<>());
         }
 
         // Filter rows
@@ -409,8 +409,8 @@ public class DataFrame {
             Object value = columnData.get(i);
             if (value != null && value.toString().contains(substring)) {
                 // Add this row to filtered result
-                for (String col : columns.keySet()) {
-                    filteredColumns.get(col).add(columns.get(col).get(i));
+                for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
+                    filteredColumns.get(col.getKey()).add(col.getValue().get(i));
                 }
                 if (index != null && i < index.size()) {
                     filteredIndex.add(index.get(i));
@@ -442,8 +442,8 @@ public class DataFrame {
         List<String> filteredIndex = new ArrayList<>();
 
         // Initialize filtered columns
-        for (String col : columns.keySet()) {
-            filteredColumns.put(col, new ArrayList<>());
+        for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
+            filteredColumns.put(col.getKey(), new ArrayList<>());
         }
 
         // Filter rows
@@ -459,8 +459,8 @@ public class DataFrame {
 
             if (matches) {
                 // Add this row to filtered result
-                for (String col : columns.keySet()) {
-                    filteredColumns.get(col).add(columns.get(col).get(i));
+                for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
+                    filteredColumns.get(col.getKey()).add(col.getValue().get(i));
                 }
                 if (index != null && i < index.size()) {
                     filteredIndex.add(index.get(i));
@@ -492,8 +492,8 @@ public class DataFrame {
         List<String> filteredIndex = new ArrayList<>();
 
         // Initialize filtered columns
-        for (String col : columns.keySet()) {
-            filteredColumns.put(col, new ArrayList<>());
+        for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
+            filteredColumns.put(col.getKey(), new ArrayList<>());
         }
 
         // Filter rows
@@ -509,7 +509,7 @@ public class DataFrame {
 
             if (matches) {
                 // Add this row to filtered result
-                for (String col : columns.keySet()) {
+                for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
                     filteredColumns.get(col).add(columns.get(col).get(i));
                 }
                 if (index != null && i < index.size()) {
@@ -543,8 +543,8 @@ public class DataFrame {
         List<String> filteredIndex = new ArrayList<>();
 
         // Initialize filtered columns
-        for (String col : columns.keySet()) {
-            filteredColumns.put(col, new ArrayList<>());
+        for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
+            filteredColumns.put(col.getKey(), new ArrayList<>());
         }
 
         // Filter rows
@@ -552,7 +552,7 @@ public class DataFrame {
             Object value = columnData.get(i);
             if (value != null && predicate.test(value.toString())) {
                 // Add this row to filtered result
-                for (String col : columns.keySet()) {
+                for (Map.Entry<String, List<Object>> col : columns.entrySet()) {
                     filteredColumns.get(col).add(columns.get(col).get(i));
                 }
                 if (index != null && i < index.size()) {
