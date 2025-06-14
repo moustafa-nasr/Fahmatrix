@@ -93,7 +93,7 @@ public class CsvExporter {
                 String tmpValue = headers[i];
 
                 if (hasQuotes) {
-                    tmpValue.replace("\"", "\"\"");
+                    tmpValue = tmpValue.replace("\"", "\"\"");
                     writer.print("\"" + tmpValue + "\"");
                 } else {
                     writer.print(tmpValue);
@@ -122,7 +122,7 @@ public class CsvExporter {
                     // TODO escape newline, commas(delimiter) and double qoutes
                     // https://datatracker.ietf.org/doc/html/rfc4180#page-2
                     if (hasQuotes) {
-                        tmpValue.replace("\"", "\"\"");
+                        tmpValue = tmpValue.replace("\"", "\"\"");
                         writer.print("\"" + tmpValue + "\"");
                     } else {
                         writer.print(tmpValue);
@@ -144,7 +144,7 @@ public class CsvExporter {
             // // TODO escape newline, commas(delimiter) and double qoutes
             // https://datatracker.ietf.org/doc/html/rfc4180#page-2
             // if (hasQuotes) {
-            // tmpValue.replace("\"", "\"\"");
+            // tmpValue = tmpValue.replace("\"", "\"\"");
             // writer.print("\"" + tmpValue + "\"");
             // } else {
             // writer.print(tmpValue);
