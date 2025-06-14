@@ -293,7 +293,7 @@ public class CsvImporter {
      * CSV format object
      * <br>
      */
-    private class CSVFormat {
+    private static class CSVFormat {
         private final char delimiter;
         private final boolean hasQuotes;
 
