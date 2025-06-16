@@ -6,8 +6,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
@@ -24,24 +22,46 @@ public class OdsExporter {
     private String filePath;
     private Map<String, List<Object>> columns;
 
+    /**
+     * Constructs a new OdsExporter instance with the specified file name.
+     * <br>
+     * 
+     * @param filePath the file name to export
+     */
     public OdsExporter(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Returns the file name associated with this OdsExporter instance.
+     *
+     * @return the file name
+     */
     public String getFilePath() {
         return filePath;
     }
 
+    /**
+     * Sets the file name for this CsvExporter instance.
+     *
+     * @param fileName the new file name
+     */
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
+    /**
+     * Save data to ODS file
+     * <br>
+     *
+     * @param columns Map of column names to values
+     * @throws IOException if failed to write to file
+     */
     public void saveODS(Map<String, List<Object>> columns) throws Exception {
         this.columns = columns.entrySet().stream()
-        .collect(Collectors.toMap(
-            Map.Entry::getKey,
-            entry -> new ArrayList<>(entry.getValue())
-        ));
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> new ArrayList<>(entry.getValue())));
 
         try (FileOutputStream fos = new FileOutputStream(filePath);
                 ZipOutputStream zos = new ZipOutputStream(fos)) {
@@ -56,6 +76,15 @@ public class OdsExporter {
         }
     }
 
+    /**
+     * Writes the MIME type of the document to the specified ZipOutputStream.
+     * This is a required file for ODS documents, which indicates that it's an
+     * OpenDocument Spreadsheet (ods) file.
+     * <br>
+     * 
+     * @param zos the ZipOutputStream to write to
+     * @throws IOException if an I/O error occurs while writing
+     */
     private void writeMimeType(ZipOutputStream zos) throws IOException {
         // First entry must be mimetype (uncompressed)
         ZipEntry entry = new ZipEntry("mimetype");
@@ -69,12 +98,33 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
+    /**
+     * Calculates the CRC-32 checksum of a given byte array.
+     * <br>
+     * This method uses the {@link java.util.zip.CRC32} class to calculate
+     * the checksum. The resulting value is then returned as an integer.
+     * <br>
+     * 
+     * @param data the input data for which the checksum should be calculated
+     * @return the CRC-32 checksum of the input data
+     */
     private long calculateCRC32(byte[] data) {
         java.util.zip.CRC32 crc = new java.util.zip.CRC32();
         crc.update(data);
         return crc.getValue();
     }
 
+    /**
+     * This method is responsible for writing the manifest file, which is an XML
+     * file that describes the structure and contents of the ODS document.
+     * <br>
+     * The manifest file contains metadata about the ODS document, including
+     * a list of all files that make up the document.
+     * <br>
+     *
+     * @param zos the ZipOutputStream to write to
+     * @throws IOException if an I/O error occurs while writing
+     */
     private void writeManifest(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("META-INF/manifest.xml"));
 
@@ -93,6 +143,13 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
+    /**
+     * Writes the meta file, which contains metadata about the ODS document.
+     * <br>
+     *
+     * @param zos the ZipOutputStream to write to
+     * @throws IOException if an I/O error occurs while writing to the ODS archive
+     */
     private void writeMeta(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("meta.xml"));
 
@@ -110,6 +167,20 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
+    /**
+     * Writes the settings file, which contains configuration data for the ODS
+     * document.
+     * <br>
+     * This method is responsible for writing the content of the "settings.xml"
+     * file,
+     * which contains metadata about the ODS document, including configuration
+     * settings
+     * and other relevant information.
+     * <br>
+     *
+     * @param zos the ZipOutputStream to write to
+     * @throws IOException if an I/O error occurs while writing
+     */
     private void writeSettings(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("settings.xml"));
 
@@ -130,6 +201,17 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
+    /**
+     * Writes the styles file, which contains formatting information for the ODS
+     * document.
+     * This method is responsible for writing the content of the "styles.xml" file,
+     * which contains metadata about the ODS document, including formatting settings
+     * and other relevant information.
+     * <br>
+     *
+     * @param zos the ZipOutputStream to write to
+     * @throws IOException if an I/O error occurs while writing
+     */
     private void writeStyles(ZipOutputStream zos) throws IOException {
         zos.putNextEntry(new ZipEntry("styles.xml"));
 
@@ -161,12 +243,25 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeContent(ZipOutputStream zos) throws IOException,ParserConfigurationException,TransformerException {
+    /**
+     * Writes the content of the ODS document.
+     * This method is responsible for writing the content of the "content.xml" file,
+     * which contains the actual data of the ODS document.
+     * <br>
+     *
+     * @param zos the ZipOutputStream to write to
+     * @throws IOException                  if an I/O error occurs while writing
+     * @throws ParserConfigurationException if a parser configuration exception
+     *                                      occurs
+     * @throws TransformerException         if a transformation exception occurs
+     */
+    private void writeContent(ZipOutputStream zos)
+            throws IOException, ParserConfigurationException, TransformerException {
         zos.putNextEntry(new ZipEntry("content.xml"));
 
         Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
 
-        // Root element
+        // Set the XML declaration in the document
         Element documentContent = doc.createElement("office:document-content");
         documentContent.setAttribute("xmlns:office", "urn:oasis:names:tc:opendocument:xmlns:office:1.0");
         documentContent.setAttribute("xmlns:table", "urn:oasis:names:tc:opendocument:xmlns:table:1.0");
@@ -244,7 +339,15 @@ public class OdsExporter {
         zos.closeEntry();
     }
 
-    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException  {
+    /**
+     * Writes the content of a Document object to a ZipOutputStream.
+     * <br>
+     * 
+     * @param doc the Document object to write
+     * @param zos the ZipOutputStream to write to
+     * @throws TransformerException if a transformation exception occurs
+     */
+    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException {
         TransformerFactory transformerFactory = FileHelpers.createSecureTransformerFactory();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");

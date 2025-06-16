@@ -20,6 +20,7 @@ public class CsvExporter {
 
     /**
      * Constructs a new CsvExporter instance with the specified file name.
+     * <br>
      *
      * @param fileName the file name to export
      */
@@ -31,7 +32,8 @@ public class CsvExporter {
      * Constructs a new CsvExporter instance with the specified file name,
      * delimiter and hasQuotes flags. The delimiter is used to separate fields in
      * the CSV file.
-     *
+     * <br>
+     * 
      * @param fileName  the file name to export
      * @param delimiter the character used as field separator (default: ',')
      * @param hasQuotes whether fields are enclosed with quotes (default: true)
@@ -44,7 +46,8 @@ public class CsvExporter {
 
     /**
      * Returns the file name associated with this CsvExporter instance.
-     *
+     * <br>
+     * 
      * @return the file name
      */
     public String getFileName() {
@@ -53,7 +56,8 @@ public class CsvExporter {
 
     /**
      * Sets the file name for this CsvExporter instance.
-     *
+     * <br>
+     * 
      * @param fileName the new file name
      */
     public void setFileName(String fileName) {

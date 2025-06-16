@@ -10,6 +10,17 @@ public class JsonImporter {
     private Map<String, List<Object>> columns = new LinkedHashMap<>();
     private List<String> index = new ArrayList<>();
 
+    /**
+     * Reads JSON data from a text file.
+     * <br>
+     * This method attempts to read the entire file into memory if it is under the
+     * specified threshold. If the file size exceeds this threshold, it will switch
+     * to streaming mode to avoid OutOfMemoryErrors.
+     * <br>
+     * 
+     * @param filePath the path to the JSON file
+     * @throws IOException if there is an issue reading the file
+     */
     public void readJSON(String filePath) throws IOException {
         long fileSize = Files.size(Paths.get(filePath));
 
@@ -18,7 +29,7 @@ public class JsonImporter {
                 readJSONInMemory(filePath);
             } catch (OutOfMemoryError e) {
                 // If we run out of memory, clear and switch to streaming
-                
+
                 if (columns != null) {
                     columns.clear();
                     columns = null;
@@ -27,7 +38,7 @@ public class JsonImporter {
                     index.clear();
                     index = null;
                 }
-                
+
                 // Give JVM a moment to clean up naturally
                 try {
                     Thread.sleep(100); // Brief pause to allow natural GC
@@ -45,6 +56,17 @@ public class JsonImporter {
         }
     }
 
+    /**
+     * Reads JSON from a text file into memory.
+     * <br>
+     * This method reads the entire file into memory and parses it as a JSON array
+     * of objects. It is only used when the file size is under the specified
+     * threshold.
+     * <br>
+     * 
+     * @param filePath the path to the JSON file
+     * @throws IOException if there is an issue reading the file
+     */
     private void readJSONInMemory(String filePath) throws IOException {
         String content = new String(Files.readAllBytes(Paths.get(filePath)));
         content = content.trim();
@@ -56,6 +78,16 @@ public class JsonImporter {
         }
     }
 
+    /**
+     * Reads JSON data from a text file in streaming mode.
+     * <br>
+     * This method reads the file line by line, parses each object as a flat JSON
+     * object (i.e., with no nesting), and adds it to the internal data structure.
+     * <br>
+     *
+     * @param filePath the path to the JSON file
+     * @throws IOException if there is an issue reading the file
+     */
     private void readJSONStreaming(String filePath) throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             StringBuilder sb = new StringBuilder();
@@ -92,6 +124,15 @@ public class JsonImporter {
         }
     }
 
+    /**
+     * Parses a JSON array from the given content.
+     * <br>
+     * This method iterates through the content, identifying and parsing individual
+     * objects within the array.
+     * <br>
+     * 
+     * @param content the JSON array content
+     */
     private void parseJsonArray(String content) {
         int rowId = 0;
         int braceCount = 0;
@@ -122,7 +163,18 @@ public class JsonImporter {
         }
     }
 
+    /**
+     * Parses a flat JSON object from the given content.
+     * <br>
+     * This method iterates through the content, identifying and parsing individual
+     * key-value pairs within the object.
+     * <br>
+     * 
+     * @param json the JSON object content
+     * @return a Map of key-value pairs representing the parsed JSON object
+     */
     private Map<String, Object> parseFlatJsonObject(String json) {
+
         Map<String, Object> result = new LinkedHashMap<>();
         json = json.trim();
         if (!json.startsWith("{") || !json.endsWith("}"))
@@ -179,6 +231,16 @@ public class JsonImporter {
         return result;
     }
 
+    /**
+     * Adds a new row to the internal data structure.
+     * <br>
+     * This method takes a parsed JSON object and adds its key-value pairs to the
+     * columns Map, as well as adding a new index entry.
+     * <br>
+     * 
+     * @param row   the parsed JSON object
+     * @param rowId the ID of the row being added
+     */
     private void addRow(Map<String, Object> row, int rowId) {
         for (Map.Entry<String, Object> entry : row.entrySet()) {
             columns.computeIfAbsent(entry.getKey(), k -> new ArrayList<>()).add(entry.getValue());
@@ -186,6 +248,17 @@ public class JsonImporter {
         index.add("row_" + rowId);
     }
 
+    /**
+     * Parses a value from the given raw string.
+     * <br>
+     * This method attempts to parse the raw string as a number or boolean, and
+     * returns it as an Object. If the parsing fails, it will return the raw string
+     * itself.
+     * <br>
+     *
+     * @param rawValue the raw string to be parsed
+     * @return the parsed value as an Object
+     */
     private Object parseValue(String rawValue) {
         if (rawValue.startsWith("\"") && rawValue.endsWith("\"")) {
             return unquote(rawValue);
@@ -206,6 +279,13 @@ public class JsonImporter {
         }
     }
 
+    /**
+     * Removes double quotes from a string.
+     * <br>
+     * 
+     * @param str the input string
+     * @return the input string with double quotes removed
+     */
     private String unquote(String str) {
         if (str == null || str.length() < 2)
             return str;
@@ -215,10 +295,22 @@ public class JsonImporter {
         return str;
     }
 
+    /**
+     * Returns the columns map containing all the data.
+     * <br>
+     * 
+     * @return the columns map
+     */
     public Map<String, List<Object>> getColumns() {
         return columns;
     }
 
+    /**
+     * Returns the index list containing all the row IDs.
+     * <br>
+     * 
+     * @return the index list
+     */
     public List<String> getIndex() {
         return index;
     }

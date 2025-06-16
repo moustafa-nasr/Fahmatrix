@@ -316,15 +316,31 @@ public class CsvImporter {
         private final char delimiter;
         private final boolean hasQuotes;
 
+        /**
+         * Constructs a new instance of this class.
+         *
+         * @param delimiter the character to use as a delimiter
+         * @param hasQuotes whether the file format uses quotes around fields
+         */
         public CSVFormat(char delimiter, boolean hasQuotes) {
             this.delimiter = delimiter;
             this.hasQuotes = hasQuotes;
         }
 
+        /**
+         * Returns the delimiter used in this file format.
+         *
+         * @return the delimiter character
+         */
         public char getDelimiter() {
             return delimiter;
         }
 
+        /**
+         * Returns whether quotes are used around fields in this file format.
+         *
+         * @return true if quotes are used, false otherwise
+         */
         public boolean hasQuotes() {
             return hasQuotes;
         }

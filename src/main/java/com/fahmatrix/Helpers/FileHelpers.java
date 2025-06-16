@@ -19,7 +19,7 @@ public class FileHelpers {
      * Utility method to create secure DocumentBuilderFactory to prevent XXE attacks
      * <br>
      * 
-     * @return
+     * @return secure DocumentBuilderFactory
      * @throws ParserConfigurationException for XML document builder configuration
      *                                      issues
      */
@@ -37,9 +37,11 @@ public class FileHelpers {
     }
 
     /**
+     * Utility method to create secure TransformerFactory to prevent XXE attacks
+     * <br>
      * 
-     * @return
-     * @throws TransformerException
+     * @return secure TransformerFactory
+     * @throws TransformerException if there is an issue with the transformation process.
      */
     public static TransformerFactory createSecureTransformerFactory() throws TransformerException {
         TransformerFactory factory = TransformerFactory.newInstance();
