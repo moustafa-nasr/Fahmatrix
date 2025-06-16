@@ -1,6 +1,9 @@
-# Fahmatrix [![Version](https://img.shields.io/badge/version-0.1.5-yellow)](https://github.com/moustafa-nasr/fahmatrix/releases)
+# Fahmatrix [![Version](https://img.shields.io/badge/version-0.1.6-yellow)](https://github.com/moustafa-nasr/fahmatrix/releases)
 [![Docs](https://img.shields.io/badge/Javadoc-online-blue)](https://moustafa-nasr.github.io/Fahmatrix/)  [![Java](https://img.shields.io/badge/Java-17+-brightgreen?logo=java)](https://openjdk.org/) [![Platform](https://img.shields.io/badge/Platform-JVM-lightgrey)]() [![License](https://img.shields.io/github/license/moustafa-nasr/fahmatrix)](https://github.com/moustafa-nasr/fahmatrix/blob/main/LICENSE)
-[![](https://jitpack.io/v/moustafa-nasr/Fahmatrix.svg)](https://jitpack.io/#moustafa-nasr/Fahmatrix/)
+
+
+[![DeepSource](https://app.deepsource.com/gh/moustafa-nasr/Fahmatrix.svg/?label=code+coverage&show_trend=true&token=6ViFroO6vI_7nN0kHPXFIbh4)](https://app.deepsource.com/gh/moustafa-nasr/Fahmatrix/)[![](https://jitpack.io/v/moustafa-nasr/Fahmatrix.svg)](https://jitpack.io/#moustafa-nasr/Fahmatrix/)[![Maven Central](https://img.shields.io/maven-central/v/com.fahmatrix/fahmatrix?label=Maven%20Central)](https://central.sonatype.com/artifact/com.fahmatrix/fahmatrix)
+
 
 [![Star](https://img.shields.io/github/stars/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/stargazers) [![Fork](https://img.shields.io/github/forks/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/forks) [![Watch](https://img.shields.io/github/watchers/moustafa-nasr/fahmatrix?style=social)](https://github.com/moustafa-nasr/fahmatrix/watchers)
 
@@ -15,8 +18,8 @@ Ideal for small projects, backend systems, or embedded environments like Android
 📄 Easy CSV, Xlsx, Ods, Json reading and previewing  
 📄 Easy CSV, Xlsx, Ods, Json writing  
 🔍 Row filtering and column selection  
-🔍 Column filtering by string operations (contains, equals, etc..)
-📊 Aggregations (mean , average , etc.. )
+🔍 Column filtering by string operations (contains, equals, etc..)  
+📊 Aggregations (mean , average , etc.. )  
 📊 Grouping, and sorting (coming soon)  
 🧩 No external dependencies (for now)
 
@@ -50,7 +53,7 @@ Add to pom.xml
 <dependency>
   <groupId>com.fahmatrix</groupId>
   <artifactId>fahmatrix</artifactId>
-  <version>0.1.5</version>
+  <version>0.1.6</version>
 </dependency>
 ```
 
@@ -60,7 +63,7 @@ Add to build.gradle.kts
 
 ```kotlin
 dependencies {
-  implementation("com.fahmatrix:fahmatrix:0.1.5")
+  implementation("com.fahmatrix:fahmatrix:0.1.6")
 }
 
 ```
@@ -71,7 +74,7 @@ Add to build.gradle
 
 ```java
 dependencies {
-  implementation 'com.fahmatrix:fahmatrix:0.1.5'
+  implementation 'com.fahmatrix:fahmatrix:0.1.6'
 }
 
 ```
@@ -91,7 +94,7 @@ Add to pom.xml
   	<dependency>
 	    <groupId>com.github.moustafa-nasr</groupId>
 	    <artifactId>Fahmatrix</artifactId>
-	    <version>v0.1.5</version>
+	    <version>v0.1.6</version>
 	</dependency>
 
 ```
@@ -111,7 +114,7 @@ For Java add to build.gradle
 	}
 
     dependencies {
-	        implementation 'com.github.moustafa-nasr:Fahmatrix:v0.1.5'
+	        implementation 'com.github.moustafa-nasr:Fahmatrix:v0.1.6'
 	}
 
 ```
@@ -129,7 +132,7 @@ For Kotlin add to build.gradle.kts
 	}
 
     dependencies {
-	        implementation("com.github.moustafa-nasr:Fahmatrix:v0.1.5")
+	        implementation("com.github.moustafa-nasr:Fahmatrix:v0.1.6")
 	}
 
 ```

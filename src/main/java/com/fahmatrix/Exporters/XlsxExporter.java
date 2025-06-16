@@ -62,10 +62,9 @@ public class XlsxExporter {
      */
     public void saveXLSX(Map<String, List<Object>> columns) throws Exception {
         this.columns = columns.entrySet().stream()
-        .collect(Collectors.toMap(
-            Map.Entry::getKey,
-            entry -> new ArrayList<>(entry.getValue())
-        ));
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> new ArrayList<>(entry.getValue())));
         this.sharedStrings = new ArrayList<>();
         this.stringIndexMap = new HashMap<>();
 
@@ -87,8 +86,11 @@ public class XlsxExporter {
     }
 
     /**
-     * Builds the shared strings for the XLSX file, including column headers and data values.
-     * This method populates the `sharedStrings` list with unique string values and creates an index map (`stringIndexMap`) to store the corresponding indices of each string in the `sharedStrings` list.
+     * Builds the shared strings for the XLSX file, including column headers and
+     * data values.
+     * This method populates the `sharedStrings` list with unique string values and
+     * creates an index map (`stringIndexMap`) to store the corresponding indices of
+     * each string in the `sharedStrings` list.
      * <br>
      * 
      * @see #saveXLSX(Map)
@@ -120,7 +122,8 @@ public class XlsxExporter {
 
     /**
      * Writes the [Content_Types].xml file to the ZIP archive.
-     * This file contains metadata about the contents of the XLSX file, including the types and locations of each part.
+     * This file contains metadata about the contents of the XLSX file, including
+     * the types and locations of each part.
      * 
      * @param zos the ZipOutputStream instance used to write the file
      * @throws IOException if an error occurs while writing the file
@@ -149,7 +152,8 @@ public class XlsxExporter {
 
     /**
      * Writes the _rels/.rels file to the ZIP archive.
-     * This file contains relationships between parts of the XLSX file, such as workbook, worksheets, and shared strings.
+     * This file contains relationships between parts of the XLSX file, such as
+     * workbook, worksheets, and shared strings.
      * <br>
      *
      * @param zos the ZipOutputStream instance used to write the file
@@ -170,7 +174,8 @@ public class XlsxExporter {
 
     /**
      * Writes the xl/workbook.xml file to the ZIP archive.
-     * This file contains metadata about the workbook, including its name and sheet information.
+     * This file contains metadata about the workbook, including its name and sheet
+     * information.
      * <br>
      * 
      * @param zos the ZipOutputStream instance used to write the file
@@ -193,7 +198,8 @@ public class XlsxExporter {
 
     /**
      * Writes the workbook relationships to the ZIP archive.
-     * This file contains metadata about the workbook, including its name and sheet information.
+     * This file contains metadata about the workbook, including its name and sheet
+     * information.
      * <br>
      * 
      * @param zos the ZipOutputStream instance used to write the file
@@ -218,13 +224,15 @@ public class XlsxExporter {
 
     /**
      * Writes the xl/sharedStrings.xml file to the ZIP archive.
-     * This file contains a list of unique strings used in the workbook, including column headers and data values.
+     * This file contains a list of unique strings used in the workbook, including
+     * column headers and data values.
      * <br>
      * 
      * @param zos the ZipOutputStream instance used to write the file
      * @throws IOException if an error occurs while writing the file
      */
-    private void writeSharedStrings(ZipOutputStream zos) throws IOException,ParserConfigurationException,TransformerException {
+    private void writeSharedStrings(ZipOutputStream zos)
+            throws IOException, ParserConfigurationException, TransformerException {
         zos.putNextEntry(new ZipEntry("xl/sharedStrings.xml"));
 
         Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
@@ -297,11 +305,15 @@ public class XlsxExporter {
      * <br>
      * 
      * @param zos the ZipOutputStream instance used to write the file
-     * @throws IOException if an error occurs while writing the file
-     * @throws ParserConfigurationException if a problem occurs while creating a DocumentBuilder
-     * @throws TransformerException if a problem occurs while transforming data into XML
+     * @throws IOException                  if an error occurs while writing the
+     *                                      file
+     * @throws ParserConfigurationException if a problem occurs while creating a
+     *                                      DocumentBuilder
+     * @throws TransformerException         if a problem occurs while transforming
+     *                                      data into XML
      */
-    private void writeSheet(ZipOutputStream zos) throws IOException,ParserConfigurationException,TransformerException {
+    private void writeSheet(ZipOutputStream zos)
+            throws IOException, ParserConfigurationException, TransformerException {
         zos.putNextEntry(new ZipEntry("xl/worksheets/sheet1.xml"));
 
         Document doc = FileHelpers.createSecureDocumentBuilderFactory().newDocumentBuilder().newDocument();
@@ -375,12 +387,14 @@ public class XlsxExporter {
     }
 
     /**
-     * Returns a string representation of the cell reference at the specified column and row.
+     * Returns a string representation of the cell reference at the specified column
+     * and row.
      * <br>
      * 
      * @param col the column index (0-based)
      * @param row the row index (1-based)
-     * @return a string representation of the cell reference in the format "A1", "B2", etc.
+     * @return a string representation of the cell reference in the format "A1",
+     *         "B2", etc.
      */
     private String getCellReference(int col, int row) {
         StringBuilder colRef = new StringBuilder();
@@ -402,7 +416,7 @@ public class XlsxExporter {
      * @param zos the ZipOutputStream to write to
      * @throws TransformerException if a transformation exception occurs
      */
-    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException  {
+    private void writeDocumentToZip(Document doc, ZipOutputStream zos) throws TransformerException {
         TransformerFactory transformerFactory = FileHelpers.createSecureTransformerFactory();
         Transformer transformer = transformerFactory.newTransformer();
         transformer.setOutputProperty(OutputKeys.INDENT, "yes");

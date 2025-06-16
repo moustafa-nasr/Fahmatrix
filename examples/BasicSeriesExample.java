@@ -6,8 +6,8 @@ import com.fahmatrix.Series;
 public class BasicSeriesExample {
     /* 
      * Windows Only
-     * javac -cp ".\build\libs\fahmatrix-0.1.5.jar" .\examples\BasicSeriesExample.java
-     * java -cp ".\build\libs\fahmatrix-0.1.5.jar;examples" BasicSeriesExample
+     * javac -cp ".\build\libs\fahmatrix-0.1.6.jar" .\examples\BasicSeriesExample.java
+     * java -cp ".\build\libs\fahmatrix-0.1.6.jar;examples" BasicSeriesExample
      *
      */
     

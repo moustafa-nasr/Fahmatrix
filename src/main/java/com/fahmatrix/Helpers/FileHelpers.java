@@ -41,7 +41,8 @@ public class FileHelpers {
      * <br>
      * 
      * @return secure TransformerFactory
-     * @throws TransformerException if there is an issue with the transformation process.
+     * @throws TransformerException if there is an issue with the transformation
+     *                              process.
      */
     public static TransformerFactory createSecureTransformerFactory() throws TransformerException {
         TransformerFactory factory = TransformerFactory.newInstance();

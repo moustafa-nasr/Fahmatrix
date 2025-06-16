@@ -52,7 +52,7 @@ public class CsvImporter {
                 readCSVInMemory(filePath); // Fast but uses more memory
             } catch (OutOfMemoryError e) {
                 // If we run out of memory, clear and switch to streaming
-                
+
                 if (columns != null) {
                     columns.clear();
                     columns = null;
@@ -61,7 +61,7 @@ public class CsvImporter {
                     index.clear();
                     index = null;
                 }
-                
+
                 // Give JVM a moment to clean up naturally
                 try {
                     Thread.sleep(100); // Brief pause to allow natural GC
@@ -71,8 +71,7 @@ public class CsvImporter {
 
                 columns = new HashMap<>();
                 index = new ArrayList<>();
-    
-    
+
                 readCSVStreaming(filePath);
             }
         } else {

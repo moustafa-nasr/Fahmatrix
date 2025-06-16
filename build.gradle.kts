@@ -5,14 +5,15 @@ plugins {
 }
 
 group = "com.fahmatrix" // Replace with your group
-version = "0.1.5"
+version = "0.1.6"
 
 sonar {
   properties {
-    property("sonar.projectKey", "com:fahmatrix")
-    property("sonar.projectName", "Fahmatrix")
+    property("sonar.projectKey", "Fahmatrix-dev")
+    property("sonar.projectName", "Fahmatrix-dev")
     property("sonar.host.url", "http://localhost:9000")
-    property("sonar.token", System.getenv("SONAR_TOKEN_FAHMATRIX"))
+    property("sonar.token", System.getenv("SONAR_TOKEN_FAHMATRIX_DEV"))
+    property("sonar.scm.disabled", "true")
   }
 }
 

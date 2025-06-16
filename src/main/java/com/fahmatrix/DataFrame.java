@@ -30,7 +30,8 @@ import com.fahmatrix.Importers.SimpleXlsxImporter;
  * Export To CSV/TSV, xlsx, Ods, JSON <br>
  * Reverse (transpose) data <br>
  * Select Row/Column by Label or Position <br>
- * Filter By String Opertions (contains,  equal, equal ignore case, start with , end with, regex , not empty, custom String Predicate)
+ * Filter By String Opertions (contains, equal, equal ignore case, start with ,
+ * end with, regex , not empty, custom String Predicate)
  */
 public class DataFrame {
 
@@ -71,10 +72,9 @@ public class DataFrame {
         // "+index.size()+" != "+columns.size());
         // }
         this.columns = columns.entrySet().stream()
-        .collect(Collectors.toMap(
-            Map.Entry::getKey,
-            entry -> new ArrayList<>(entry.getValue())
-        ));
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        entry -> new ArrayList<>(entry.getValue())));
         this.index = new ArrayList<>(index);
     }
 
@@ -90,8 +90,8 @@ public class DataFrame {
         // Automatically generate index if empty
         if (index.isEmpty()) {
             index.addAll(IntStream.range(0, data.size())
-                .mapToObj(String::valueOf)
-                .collect(Collectors.toList()));
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.toList()));
         }
     }
 
