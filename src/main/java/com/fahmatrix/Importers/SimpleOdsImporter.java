@@ -72,81 +72,152 @@ public class SimpleOdsImporter {
      * @throws Exception error parsing file or data
      */
     private Map<String, List<Object>> readOdsAsColumns(String filePath) throws Exception {
-        Map<String, List<Object>> columnData = new LinkedHashMap<>();
+        try (ZipFile zip = new ZipFile(filePath)) {
+            Document contentDoc = extractContentDocument(zip);
+            Element table = findFirstTable(contentDoc);
+            NodeList rowNodes = table.getElementsByTagName("table:table-row");
+
+            if (rowNodes.getLength() == 0) {
+                return new LinkedHashMap<>();
+            }
+
+            List<String> headers = extractHeaders(rowNodes);
+            Map<String, List<Object>> columnData = initializeColumnData(headers);
+            processDataRows(rowNodes, headers, columnData);
+
+            return columnData;
+        }
+    }
+
+    /**
+     * Extracts and parses the content.xml document from the ODS file
+     */
+    private Document extractContentDocument(ZipFile zip) throws Exception {
+        ZipEntry contentEntry = zip.getEntry("content.xml");
+        if (contentEntry == null) {
+            throw new Exception("content.xml not found in ODS file");
+        }
+
+        try (InputStream stream = zip.getInputStream(contentEntry)) {
+            return FileHelpers.parseXml(stream);
+        }
+    }
+
+    /**
+     * Finds the first table in the document
+     */
+    private Element findFirstTable(Document contentDoc) throws Exception {
+        NodeList tableNodes = contentDoc.getElementsByTagName("table:table");
+        if (tableNodes.getLength() == 0) {
+            throw new Exception("No tables found in ODS file");
+        }
+        return (Element) tableNodes.item(0);
+    }
+
+    /**
+     * Extracts headers from the first row
+     */
+    private List<String> extractHeaders(NodeList rowNodes) {
         List<String> headers = new ArrayList<>();
 
-        try (ZipFile zip = new ZipFile(filePath)) {
-            // Parse content.xml (main spreadsheet data)
-            ZipEntry contentEntry = zip.getEntry("content.xml");
-            if (contentEntry == null) {
-                throw new Exception("content.xml not found in ODS file");
-            }
+        if (rowNodes.getLength() > 0) {
+            Element firstRow = (Element) rowNodes.item(0);
+            NodeList headerCells = firstRow.getElementsByTagName("table:table-cell");
 
-            try (InputStream stream = zip.getInputStream(contentEntry)) {
-                Document contentDoc = FileHelpers.parseXml(stream);
-
-                // Find the first table (sheet)
-                NodeList tableNodes = contentDoc.getElementsByTagName("table:table");
-                if (tableNodes.getLength() == 0) {
-                    throw new Exception("No tables found in ODS file");
-                }
-
-                Element table = (Element) tableNodes.item(0);
-                NodeList rowNodes = table.getElementsByTagName("table:table-row");
-
-                if (rowNodes.getLength() > 0) {
-                    // First row = headers
-                    Element firstRow = (Element) rowNodes.item(0);
-                    NodeList headerCells = firstRow.getElementsByTagName("table:table-cell");
-
-                    for (int i = 0; i < headerCells.getLength(); i++) {
-                        Element cell = (Element) headerCells.item(i);
-                        String header = getCellTextContent(cell);
-                        headers.add(header != null && !header.trim().isEmpty() ? header.trim() : "Column" + (i + 1));
-                        columnData.put(headers.get(i), new ArrayList<>());
-                    }
-
-                    // Process data rows (skip first row which contains headers)
-                    for (int rowIdx = 1; rowIdx < rowNodes.getLength(); rowIdx++) {
-                        Element row = (Element) rowNodes.item(rowIdx);
-                        NodeList cells = row.getElementsByTagName("table:table-cell");
-
-                        // Handle repeated cells and columns-repeated attribute
-                        int currentColumn = 0;
-                        for (int cellIdx = 0; cellIdx < cells.getLength()
-                                && currentColumn < headers.size(); cellIdx++) {
-                            Element cell = (Element) cells.item(cellIdx);
-
-                            // Check for columns-repeated attribute
-                            String columnsRepeated = cell.getAttribute("table:number-columns-repeated");
-                            int repeatCount = 1;
-                            if (!columnsRepeated.isEmpty()) {
-                                try {
-                                    repeatCount = Integer.parseInt(columnsRepeated);
-                                } catch (NumberFormatException e) {
-                                    repeatCount = 1;
-                                }
-                            }
-
-                            Object value = parseCellValue(cell);
-
-                            // Add the value to appropriate columns (handling repetition)
-                            for (int rep = 0; rep < repeatCount && currentColumn < headers.size(); rep++) {
-                                columnData.get(headers.get(currentColumn)).add(value);
-                                currentColumn++;
-                            }
-                        }
-
-                        // Fill remaining columns with null if row is shorter
-                        while (currentColumn < headers.size()) {
-                            columnData.get(headers.get(currentColumn)).add(null);
-                            currentColumn++;
-                        }
-                    }
-                }
+            for (int i = 0; i < headerCells.getLength(); i++) {
+                Element cell = (Element) headerCells.item(i);
+                String header = getCellTextContent(cell);
+                String finalHeader = (header != null && !header.trim().isEmpty())
+                        ? header.trim()
+                        : "Column" + (i + 1);
+                headers.add(finalHeader);
             }
         }
+
+        return headers;
+    }
+
+    /**
+     * Initializes the column data structure
+     */
+    private Map<String, List<Object>> initializeColumnData(List<String> headers) {
+        Map<String, List<Object>> columnData = new LinkedHashMap<>();
+        for (String header : headers) {
+            columnData.put(header, new ArrayList<>());
+        }
         return columnData;
+    }
+
+    /**
+     * Processes all data rows (excluding header row)
+     */
+    private void processDataRows(NodeList rowNodes, List<String> headers, Map<String, List<Object>> columnData) {
+        for (int rowIdx = 1; rowIdx < rowNodes.getLength(); rowIdx++) {
+            Element row = (Element) rowNodes.item(rowIdx);
+            processDataRow(row, headers, columnData);
+        }
+    }
+
+    /**
+     * Processes a single data row
+     */
+    private void processDataRow(Element row, List<String> headers, Map<String, List<Object>> columnData) {
+        NodeList cells = row.getElementsByTagName("table:table-cell");
+        int currentColumn = 0;
+
+        // Process each cell in the row
+        for (int cellIdx = 0; cellIdx < cells.getLength() && currentColumn < headers.size(); cellIdx++) {
+            Element cell = (Element) cells.item(cellIdx);
+            currentColumn = processCellWithRepetition(cell, headers, columnData, currentColumn);
+        }
+
+        // Fill remaining columns with null if row is shorter
+        fillRemainingColumnsWithNull(headers, columnData, currentColumn);
+    }
+
+    /**
+     * Processes a single cell, handling column repetition
+     */
+    private int processCellWithRepetition(Element cell, List<String> headers,
+            Map<String, List<Object>> columnData, int startColumn) {
+        int repeatCount = getCellRepeatCount(cell);
+        Object value = parseCellValue(cell);
+        int currentColumn = startColumn;
+
+        // Add the value to appropriate columns (handling repetition)
+        for (int rep = 0; rep < repeatCount && currentColumn < headers.size(); rep++) {
+            columnData.get(headers.get(currentColumn)).add(value);
+            currentColumn++;
+        }
+
+        return currentColumn;
+    }
+
+    /**
+     * Gets the repeat count for a cell from the columns-repeated attribute
+     */
+    private int getCellRepeatCount(Element cell) {
+        String columnsRepeated = cell.getAttribute("table:number-columns-repeated");
+        if (columnsRepeated.isEmpty()) {
+            return 1;
+        }
+
+        try {
+            return Integer.parseInt(columnsRepeated);
+        } catch (NumberFormatException e) {
+            return 1;
+        }
+    }
+
+    /**
+     * Fills remaining columns with null values if the row is shorter than expected
+     */
+    private void fillRemainingColumnsWithNull(List<String> headers, Map<String, List<Object>> columnData,
+            int currentColumn) {
+        while (currentColumn < headers.size()) {
+            columnData.get(headers.get(currentColumn)).add(null);
+            currentColumn++;
+        }
     }
 
     /**
@@ -179,69 +250,138 @@ public class SimpleOdsImporter {
             return null;
         }
 
-        // Handle different value types
-        switch (valueType) {
-            case "float":
-                String floatValue = cell.getAttribute("office:value");
-                if (!floatValue.isEmpty()) {
-                    try {
-                        return Double.parseDouble(floatValue);
-                    } catch (NumberFormatException e) {
-                        // Fall back to text content
-                    }
-                }
-                try {
-                    return Double.parseDouble(textContent);
-                } catch (NumberFormatException e) {
-                    return textContent;
-                }
+        // Use a map of value type parsers to reduce cyclomatic complexity
+        Map<String, ValueParser> parsers = createValueParsers();
+        ValueParser parser = parsers.getOrDefault(valueType, parsers.get("string"));
 
-            case "currency":
-                String currencyValue = cell.getAttribute("office:value");
-                if (!currencyValue.isEmpty()) {
-                    try {
-                        return Double.parseDouble(currencyValue);
-                    } catch (NumberFormatException e) {
-                        // Fall back to text content
-                    }
-                }
-                return textContent;
+        return parser.parse(cell, textContent);
+    }
 
-            case "percentage":
-                String percentValue = cell.getAttribute("office:value");
-                if (!percentValue.isEmpty()) {
-                    try {
-                        return Double.parseDouble(percentValue) * 100; // Convert to percentage
-                    } catch (NumberFormatException e) {
-                        // Fall back to text content
-                    }
-                }
-                return textContent;
+    /**
+     * Creates a map of value type parsers
+     */
+    private Map<String, ValueParser> createValueParsers() {
+        Map<String, ValueParser> parsers = new HashMap<>();
 
-            case "date":
-                String dateValue = cell.getAttribute("office:date-value");
-                if (!dateValue.isEmpty()) {
-                    return dateValue; // Return as string for now, can be enhanced to parse as Date
-                }
-                return textContent;
+        parsers.put("float", new FloatParser());
+        parsers.put("currency", new CurrencyParser());
+        parsers.put("percentage", new PercentageParser());
+        parsers.put("date", new DateParser());
+        parsers.put("time", new TimeParser());
+        parsers.put("boolean", new BooleanParser());
+        parsers.put("string", new StringParser());
 
-            case "time":
-                String timeValue = cell.getAttribute("office:time-value");
-                if (!timeValue.isEmpty()) {
-                    return timeValue; // Return as string for now
-                }
-                return textContent;
+        return parsers;
+    }
 
-            case "boolean":
-                String boolValue = cell.getAttribute("office:boolean-value");
-                if (!boolValue.isEmpty()) {
-                    return Boolean.parseBoolean(boolValue);
-                }
-                return textContent;
+    /**
+     * Interface for value parsers
+     */
+    private interface ValueParser {
+        Object parse(Element cell, String textContent);
+    }
 
-            case "string":
-            default:
-                return textContent;
+    /**
+     * Parser for float values
+     */
+    private static class FloatParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            String floatValue = cell.getAttribute("office:value");
+            if (!floatValue.isEmpty()) {
+                Double result = tryParseDouble(floatValue);
+                if (result != null)
+                    return result;
+            }
+
+            Double result = tryParseDouble(textContent);
+            return result != null ? result : textContent;
+        }
+    }
+
+    /**
+     * Parser for currency values
+     */
+    private static class CurrencyParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            String currencyValue = cell.getAttribute("office:value");
+            if (!currencyValue.isEmpty()) {
+                Double result = tryParseDouble(currencyValue);
+                if (result != null)
+                    return result;
+            }
+            return textContent;
+        }
+    }
+
+    /**
+     * Parser for percentage values
+     */
+    private static class PercentageParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            String percentValue = cell.getAttribute("office:value");
+            if (!percentValue.isEmpty()) {
+                Double result = tryParseDouble(percentValue);
+                if (result != null)
+                    return result * 100; // Convert to percentage
+            }
+            return textContent;
+        }
+    }
+
+    /**
+     * Parser for date values
+     */
+    private static class DateParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            String dateValue = cell.getAttribute("office:date-value");
+            return !dateValue.isEmpty() ? dateValue : textContent;
+        }
+    }
+
+    /**
+     * Parser for time values
+     */
+    private static class TimeParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            String timeValue = cell.getAttribute("office:time-value");
+            return !timeValue.isEmpty() ? timeValue : textContent;
+        }
+    }
+
+    /**
+     * Parser for boolean values
+     */
+    private static class BooleanParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            String boolValue = cell.getAttribute("office:boolean-value");
+            return !boolValue.isEmpty() ? Boolean.parseBoolean(boolValue) : textContent;
+        }
+    }
+
+    /**
+     * Parser for string values (default)
+     */
+    private static class StringParser implements ValueParser {
+        @Override
+        public Object parse(Element cell, String textContent) {
+            return textContent;
+        }
+    }
+
+    /**
+     * Helper method to safely parse double values
+     */
+    private static Double tryParseDouble(String value) {
+        try {
+            return Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 }
