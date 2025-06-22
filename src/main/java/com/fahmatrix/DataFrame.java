@@ -13,6 +13,7 @@ import com.fahmatrix.Exporters.JsonExporter;
 import com.fahmatrix.Exporters.OdsExporter;
 import com.fahmatrix.Exporters.XlsxExporter;
 import com.fahmatrix.Helpers.DataSelector;
+import com.fahmatrix.Helpers.Printer;
 import com.fahmatrix.Importers.CsvImporter;
 import com.fahmatrix.Importers.JsonImporter;
 import com.fahmatrix.Importers.SimpleOdsImporter;
@@ -674,113 +675,9 @@ public class DataFrame {
      * 
      */
     public void describe() {
-        if (columns.isEmpty()) {
-            System.out.println("Empty DataFrame");
-            return;
-        }
+        Printer.describe(index, columns);
+    } 
 
-        System.out.println("DataFrame Description:");
-        System.out.print("|\t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + entry.getKey() + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| Count\t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).count() + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| Min \t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).min().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| Max \t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).max().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| Sum \t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).sum().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| Mean \t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).mean().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| Stdev\t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).stdDev().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| 25%\t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).quantile25().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| 50%\t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).median().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-        System.out.print("| 75%\t");
-        for (Map.Entry<String, List<Object>> entry : columns.entrySet()) {
-            System.out.print("| " + getColumn(entry.getKey()).quantile75().orElse(0.0) + "\t");
-        }
-        System.out.println();
-        for (int i = 0; i <= columns.size(); i++) {
-            System.out.print("+-------");
-        }
-        System.out.println();
-
-    }
 
     /**
      * Read , Parse and save the CSV file<br>
