@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.fahmatrix" // Replace with your group
-version = "0.1.6"
+version = "0.1.7"
 
 sonar {
   properties {
@@ -44,8 +44,9 @@ repositories {
 
 dependencies {
     // Add your dependencies here
-    // testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    // testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("commons-io:commons-io:2.6")
     
     // Example implementation dependency:
     // implementation("com.google.guava:guava:31.1-jre")
@@ -53,7 +54,12 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
+    }
 }
+
 
 tasks.javadoc {
     exclude("com/fahmatrix/Importers/**")
