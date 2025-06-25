@@ -15,10 +15,10 @@ import java.util.function.Consumer;
 import java.util.function.DoubleUnaryOperator;
 import java.io.PrintStream;
 
-public class SeriesTest {
+class SeriesTest {
 
     @Test
-    public void testConstructor() {
+    void testConstructor() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -29,7 +29,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -44,7 +44,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testPrint() {
+    void testPrint() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -68,7 +68,6 @@ public class SeriesTest {
         try {
             outString = out.toString();
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
 
@@ -79,7 +78,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testCount() {
+    void testCount() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -88,7 +87,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testMin() {
+    void testMin() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -97,7 +96,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testMax() {
+    void testMax() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -106,7 +105,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testSum() {
+    void testSum() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -115,7 +114,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testMean() {
+    void testMean() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -124,7 +123,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testMedian() {
+    void testMedian() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -133,7 +132,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testStdDev() {
+    void testStdDev() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -142,7 +141,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testPercentiles() {
+    void testPercentiles() {
         List<Object> values = Arrays.asList(1, 2, 3);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -151,7 +150,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testQuantile25() {
+    void testQuantile25() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -160,7 +159,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testQuantile50() {
+    void testQuantile50() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -169,7 +168,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testQuantile75() {
+    void testQuantile75() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -178,7 +177,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testPercentile() {
+    void testPercentile() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -187,7 +186,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testProcessInParallel() {
+    void testProcessInParallel() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -199,7 +198,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testProcessInParallelUsesMultipleThreads() {
+    void testProcessInParallelUsesMultipleThreads() {
         // Use more elements to increase chance of parallel execution
         List<Object> values = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
         List<String> index = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l");
@@ -227,7 +226,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testProcessInParallelHandlesExceptions() {
+    void testProcessInParallelHandlesExceptions() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -248,18 +247,36 @@ public class SeriesTest {
     }
 
     @Test
-    public void testForEachParallel() {
+    void testForEachParallel() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
+        PrintStream originalOut = System.out; // Save original System.out
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        System.setOut(new PrintStream(out));
 
         Consumer<Object> action = x -> System.out.println(x);
 
         series.forEachParallel(action);
+
+        String outString = "";
+        try {
+            outString = out.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        System.setOut(originalOut); // Restore the original
+
+        assertTrue(outString.contains("1"));
+        assertTrue(outString.contains("3"));
+        assertTrue(outString.contains("4"));
     }
 
     @Test
-    public void testForEachParallelProcessesAllElements() {
+    void testForEachParallelProcessesAllElements() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);
@@ -278,7 +295,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testForEachParallelUsesMultipleThreads() {
+    void testForEachParallelUsesMultipleThreads() {
         // Use more elements to increase chance of parallel execution
         List<Object> values = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         List<String> index = Arrays.asList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j");
@@ -301,7 +318,7 @@ public class SeriesTest {
     }
 
     @Test
-    public void testForEachParallelHandlesExceptions() {
+    void testForEachParallelHandlesExceptions() {
         List<Object> values = Arrays.asList(1, 3, 4);
         List<String> index = Arrays.asList("a", "b", "c");
         Series series = new Series(values, index);

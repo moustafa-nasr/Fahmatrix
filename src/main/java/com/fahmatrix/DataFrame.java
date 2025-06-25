@@ -73,9 +73,11 @@ public class DataFrame {
         // "+index.size()+" != "+columns.size());
         // }
         this.columns = columns.entrySet().stream()
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        entry -> new ArrayList<>(entry.getValue())));
+        .collect(Collectors.toMap(
+                Map.Entry::getKey,
+                entry -> new ArrayList<>(entry.getValue()),
+                (existing, replacement) -> existing,
+                LinkedHashMap::new)); 
         this.index = new ArrayList<>(index);
     }
 
